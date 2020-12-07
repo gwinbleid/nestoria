@@ -1,0 +1,31 @@
+.container {
+    display: grid;
+    grid-template-rows: 2fr 2fr;
+    height: 100%;
+    grid-row-gap: 30px;
+}
+
+.searching {
+    display: flex;
+}
+
+nz-button {
+    margin-left: 20px !important;
+}
+
+h3 {
+    text-align: center;
+}
+
+.form__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+nz-list {
+    margin: 0 auto;
+    min-width: 320px;
+    max-width: 800px;
+}

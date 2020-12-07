@@ -1,0 +1,36 @@
+<div class="container">
+    <nz-page-header nzBackIcon [nzGhost]="false">
+        <nz-page-header-title>{{item.name.first + ' ' + item.name.last}}</nz-page-header-title>
+        <nz-page-header-subtitle>{{item.isActive ? 'Active' : 'Inactive'}}</nz-page-header-subtitle>
+        <nz-page-header-extra>
+            <button *ngIf="!favors"nz-button nzType="primary" (click)="toggleFavors()">Add to Favourites</button>
+            <button *ngIf="favors" nz-button nzType="danger" (click)="toggleFavors()">Remove from Favourites</button>
+          </nz-page-header-extra>
+        <nz-page-header-content>
+            
+            
+
+            <div class="description__container">
+                <img src='assets/download.jpeg' alt="" srcset="" height="400" width="800px">
+                <nz-descriptions class="user__info" nzTitle="User Info" [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }">
+                    <nz-descriptions-item nzTitle="UserName">{{item.name.first + ' ' + item.name.last}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Telephone">{{item.phone}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="E-mail">{{item.email}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Age">{{item.age}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Guid">{{item.guid}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Address">
+                      {{item.address}}
+                    </nz-descriptions-item>
+                </nz-descriptions>
+
+                
+            </div>
+
+            <nz-descriptions nzTitle="About" [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }">
+                <nz-descriptions-item nzTitle="About">{{item.about}}</nz-descriptions-item>
+            </nz-descriptions>
+        </nz-page-header-content>
+    </nz-page-header>
+</div>
+
+

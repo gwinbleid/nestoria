@@ -1,0 +1,60 @@
+.logo {
+    float: left;
+}
+
+nz-layout {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+}
+
+[nz-menu] {
+    line-height: 64px;
+    font-size: 2rem;
+    list-style-type: none;
+    color: aliceblue;
+}
+
+nz-header {
+    display: flex;
+   
+    align-items: center;
+}
+
+nz-content {
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+    flex: 1;
+    padding: 20px 30px;
+    /*background: hsla(333, 37%, 46%, 1);
+
+    background: linear-gradient(135deg, hsla(333, 37%, 46%, 0.2) 20%, hsla(309, 9%, 69%, 1) 45%, hsla(243, 10%, 47%, 1) 82%);
+    
+    background: -moz-linear-gradient(135deg, hsla(333, 37%, 46%, 0.2) 20%, hsla(309, 9%, 69%, 1) 45%, hsla(243, 10%, 47%, 1) 82%);
+    
+    background: -webkit-linear-gradient(135deg, hsla(333, 37%, 46%, 0.2) 20%, hsla(309, 9%, 69%, 1) 45%, hsla(243, 10%, 47%, 1) 82%);
+    */
+}
+
+nz-footer {
+    text-align: center;
+}
+
+.inner-content {
+    background: #fff;
+    padding: 24px;
+    min-height: 280px;
+}
+
+h1 {
+    font-family: 'Lobster', sans-serif;
+    color: antiquewhite;
+    text-align: center;
+    flex: 1;
+    margin: 0;
+}
+
+.favors__btn {
+    float: left;
+}

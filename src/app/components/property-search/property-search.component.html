@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="form__wrapper">
+        <h3>Use the form below to search for houses to buy. You can search by place-name, postcode, or click 'My location', to search in your current location!</h3>
+
+        <div class="searching">
+            <input class="n__input" nz-input placeholder="Enter property" [(ngModel)]="value" />
+            <button nz-button nzType="primary" (click)="search()">Go</button>
+        </div>
+    </div>
+
+    <nz-list *ngIf="searches.length" nzBordered nzHeader="Recent Searches">
+        <nz-list-item *ngFor="let item of searches; let i = index">
+            <span nz-typography><mark># Search </mark>{{searches.length - i}}</span>
+            {{ item }}
+        </nz-list-item>
+    </nz-list>
+</div>
+

@@ -1,0 +1,14 @@
+.container {
+    
+}
+
+.description__container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 40px;
+}
+
+.user__info {
+    max-width: 500px;
+    margin-left: 30px;
+}
