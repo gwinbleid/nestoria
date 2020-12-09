@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 
 @Component({
@@ -6,8 +6,9 @@ import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angula
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   showFavorBtn: boolean = true;
+  theme = '';
 
   constructor(private router: Router) {
     this.router.events.subscribe((event) => {
@@ -24,15 +25,43 @@ export class AppComponent {
       }
 
       if (event instanceof NavigationError) {
-          // Hide loading indicator
-
-          // Present error to user
           console.log(event.error);
       }
   });
   }
 
+  ngOnInit() {
+    this.changeTheme();
+  }
+
   toFavors() {
     this.router.navigate(['/favourites']);
+  }
+
+  changeTheme() {
+    this.theme = this.theme === 'dark' ? '' : 'dark';
+
+    let themeUrl = './assets/themes/compact.css';
+
+    if (this.theme === 'dark') {
+      themeUrl = './assets/themes/dark.css';
+    }
+
+    const newThemeElement = document.createElement('link') as HTMLLinkElement;
+    document.head.appendChild(newThemeElement);
+
+    newThemeElement.type = 'text/css';
+    newThemeElement.rel = 'stylesheet';
+    newThemeElement.onload = () => {
+      const themeElements = document.querySelectorAll('link[theme-link]');
+      themeElements.forEach(themeElement => {
+        document.head.removeChild(themeElement);
+      });
+
+      newThemeElement.setAttribute('theme-link', '');
+      newThemeElement.onload = null;
+    };
+
+    newThemeElement.href = themeUrl;
   }
 }

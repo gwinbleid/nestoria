@@ -1,8 +1,8 @@
 <nz-layout>
     <nz-header>
         <h1>Property Cross</h1>
-        <button  *ngIf="showFavorBtn" class="favors__btn" nz-button nzType="defult" nzShape="round" (click)="toFavors()"><i nz-icon nzType="heart"></i>Favors</button>
-        
+        <button  *ngIf="showFavorBtn" class="favors__btn" nz-button nzType="default" nzShape="round" (click)="toFavors()"><i nz-icon nzType="heart"></i>Favors</button>
+        <button class="theme__toggle__btn" nz-button nzType="primary" nzShape="round" (click)="changeTheme()"><i nz-icon nzType="clear"></i>Change theme</button>
     </nz-header>
     <nz-content>
         <router-outlet></router-outlet>

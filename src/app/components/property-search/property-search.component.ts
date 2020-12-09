@@ -27,10 +27,6 @@ export class PropertySearchComponent implements OnInit {
     console.log(this.value);
     
     this.router.navigate(['/search', {find: this.value}]);
-    /*this.prop_search.search(this.value)
-      .subscribe(data => {
-        console.log(data);
-      })*/
   }
 
 }

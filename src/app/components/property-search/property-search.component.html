@@ -10,7 +10,7 @@
 
     <nz-list *ngIf="searches.length" nzBordered nzHeader="Recent Searches">
         <nz-list-item *ngFor="let item of searches; let i = index">
-            <span nz-typography><mark># Search </mark>{{searches.length - i}}</span>
+            <span nz-typography><i># Search </i>{{searches.length - i}}</span>
             {{ item }}
         </nz-list-item>
     </nz-list>
