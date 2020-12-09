@@ -8,7 +8,7 @@
             nzDescription={{item.about}}
           >
             <nz-list-item-meta-title>
-              <a [routerLink]="['/property', item._id]">{{ item.name.first + ' ' + item.name.last }}</a>
+              <a (click)="navigateToDetails(item._id)">{{ item.name.first + ' ' + item.name.last }}</a>
             </nz-list-item-meta-title>
           </nz-list-item-meta>
         </ng-container>

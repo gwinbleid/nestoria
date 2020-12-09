@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Employees } from 'src/app/model/employee';
 import { PropertySearchService } from 'src/app/services/property-search.service';
 
@@ -17,7 +17,8 @@ export class SearchResultsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private props: PropertySearchService
+    private props: PropertySearchService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -61,4 +62,7 @@ export class SearchResultsComponent implements OnInit {
     localStorage.setItem('recent_searches', JSON.stringify(searches_storage));
   }
 
+  navigateToDetails(id) {
+    this.router.navigate(['/property', id]);
+  }
 }

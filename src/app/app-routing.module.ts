@@ -6,6 +6,7 @@ import { PropertySearchComponent } from './components/property-search/property-s
 import { SearchResultsComponent } from './components/search-results/search-results.component';
 import { PropertySearchService } from './services/property-search.service';
 import { CountResolverService } from './services/resolvers/count-resolver.service';
+import { DetailResolver } from './services/resolvers/detail.resolver';
 import { PropertySearchResolverService } from './services/resolvers/property-search-resolver.service';
 
 const routes: Routes = [
@@ -18,7 +19,13 @@ const routes: Routes = [
       count: CountResolverService
     }
   },
-  { path: 'property/:id', component: PropertyListingComponent },
+  { 
+    path: 'property/:id', 
+    component: PropertyListingComponent,
+    resolve: {
+      data: DetailResolver
+    }
+  },
   { path: 'favourites', component: FavorsComponent },
   { path: '', redirectTo: 'main', pathMatch: 'full' },
 ];

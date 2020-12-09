@@ -21,17 +21,17 @@ export class PropertyListingComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params.id;
-    this.props.search_one(this.id)
-    .subscribe(next => {
-      this.item = next;
-      console.log(next)
-      this.local_store_data = JSON.parse(localStorage.getItem('favour_employes'));
-      if (this.local_store_data && this.local_store_data.findIndex(element => element._id === this.id) !== -1) {
-        this.favors = true;
-      } else {
-        this.favors = false;
-      }
-    })
+    this.route.data
+      .subscribe((next: {data: Employees}) => {
+        this.item = next.data;
+        this.local_store_data = JSON.parse(localStorage.getItem('favour_employes'));
+
+        if (this.local_store_data && this.local_store_data.findIndex(element => element._id === this.id) !== -1) {
+          this.favors = true;
+        } else {
+          this.favors = false;
+        }
+      })
   }
 
   toggleFavors() {
