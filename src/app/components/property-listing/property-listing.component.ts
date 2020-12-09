@@ -6,7 +6,7 @@ import { PropertySearchService } from 'src/app/services/property-search.service'
 @Component({
   selector: 'app-property-listing',
   templateUrl: './property-listing.component.html',
-  styleUrls: ['./property-listing.component.css']
+  styleUrls: ['./property-listing.component.less']
 })
 export class PropertyListingComponent implements OnInit, OnDestroy {
   id: string = '';

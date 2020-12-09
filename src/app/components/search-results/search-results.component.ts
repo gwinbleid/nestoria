@@ -6,7 +6,7 @@ import { PropertySearchService } from 'src/app/services/property-search.service'
 @Component({
   selector: 'app-search-results',
   templateUrl: './search-results.component.html',
-  styleUrls: ['./search-results.component.css']
+  styleUrls: ['./search-results.component.less']
 })
 export class SearchResultsComponent implements OnInit {
   count: number;

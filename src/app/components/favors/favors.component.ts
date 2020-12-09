@@ -4,7 +4,7 @@ import { Employees } from 'src/app/model/employee';
 @Component({
   selector: 'app-favors',
   templateUrl: './favors.component.html',
-  styleUrls: ['./favors.component.css']
+  styleUrls: ['./favors.component.less']
 })
 export class FavorsComponent implements OnInit {
   initLoading = false;

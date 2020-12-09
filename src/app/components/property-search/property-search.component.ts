@@ -5,7 +5,7 @@ import { PropertySearchService } from 'src/app/services/property-search.service'
 @Component({
   selector: 'app-property-search',
   templateUrl: './property-search.component.html',
-  styleUrls: ['./property-search.component.css']
+  styleUrls: ['./property-search.component.less']
 })
 export class PropertySearchComponent implements OnInit {
 

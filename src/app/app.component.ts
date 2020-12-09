@@ -4,7 +4,7 @@ import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angula
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.less']
 })
 export class AppComponent {
   showFavorBtn: boolean = true;
