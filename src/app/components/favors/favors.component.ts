@@ -7,12 +7,12 @@ import { Employees } from 'src/app/model/employee';
   styleUrls: ['./favors.component.less']
 })
 export class FavorsComponent implements OnInit {
-  initLoading = false;
-  results?;
+  isInitLoading = false;
+  favors?;
   constructor() { }
 
   ngOnInit(): void {
-    this.results = JSON.parse(localStorage.getItem('favour_employes'));
+    this.favors = JSON.parse(localStorage.getItem('favour_employes'));
   }
 
 }

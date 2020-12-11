@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { filter, flatMap, map, tap, take } from 'rxjs/operators'
+import { filter, flatMap, map, tap, take, mergeMap, delay, catchError } from 'rxjs/operators'
 import { Employees } from '../model/employee';
+import { EMPTY, of, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PropertySearchService {
+export class EmployeesService {
   jsonUrl: string = 'assets/db.json';
 
   constructor(private http: HttpClient) { }
@@ -20,6 +21,19 @@ export class PropertySearchService {
         map(res => res.filter(item => {
           return item['company'].includes(search_data.toUpperCase())
         }))
+      )
+  }
+
+  searchFirstTen(search_data) {
+    return this.http.get<Employees[]>(this.jsonUrl)
+      .pipe(
+        map(res => res.filter(item => {
+          return item['company'].includes(search_data.toUpperCase())
+        }))
+      )
+      .pipe(
+        map(data => data.slice(0, 10)),
+        tap(data => console.log()),
       )
   }
 
@@ -42,5 +56,13 @@ export class PropertySearchService {
       })),
       map(res => res.slice(length, length + 10))
     )
+  }
+
+  generatingErrorRequest() {
+    return this.http.get<Employees[]>('http.sobaka-kusaka.com')
+      .pipe(
+        delay(3000),
+        catchError(err => throwError(err))
+      )
   }
 }

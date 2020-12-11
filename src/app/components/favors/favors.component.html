@@ -1,7 +1,7 @@
 <nz-page-header class="site-page-header" nzBackIcon nzTitle='Favourites'>
     <nz-page-header-content>
-      <nz-list *ngIf="results.length" class="demo-loadmore-list" [nzLoading]="initLoading">
-          <nz-list-item *ngFor="let item of results">
+      <nz-list *ngIf="favors.length" class="demo-loadmore-list" [nzLoading]="isInitLoading">
+          <nz-list-item *ngFor="let item of favors">
             <ng-container *ngIf="!item.loading">
               <nz-list-item-meta
                 nzAvatar={{item.picture}}
@@ -16,7 +16,7 @@
           </nz-list-item>
         </nz-list>
 
-        <nz-result *ngIf="!results.length" nzStatus="warning" nzTitle="There are no any Favourites Employees">
+        <nz-result *ngIf="!favors.length" nzStatus="warning" class="ant__result" nzTitle="There are no any Favourites Employees">
         </nz-result>
     </nz-page-header-content>
   </nz-page-header>

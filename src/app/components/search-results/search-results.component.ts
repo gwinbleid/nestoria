@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Data, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Employees } from 'src/app/model/employee';
-import { PropertySearchService } from 'src/app/services/property-search.service';
+import { EmployeesService } from 'src/app/services/employees.service';
 
 @Component({
   selector: 'app-search-results',
@@ -11,13 +12,13 @@ import { PropertySearchService } from 'src/app/services/property-search.service'
 export class SearchResultsComponent implements OnInit {
   count: number;
   search_value: any;
-  initLoading = true; // bug
-  loadingMore = true;
-  results?;
+  isInitLoading: boolean = true; // bug
+  canLoadingMore: boolean = true;
+  employees?;
 
   constructor(
     private route: ActivatedRoute,
-    private props: PropertySearchService,
+    private employeesService: EmployeesService,
     private router: Router
   ) { }
 
@@ -26,32 +27,32 @@ export class SearchResultsComponent implements OnInit {
     this.recent_searches_manipulating();
 
     this.route.data
-    .subscribe((next: { result: Employees[], count: number }) => {
-      console.log(next);
-      this.results = next.result;
-      this.count = next.count;
-      this.initLoading = false;
+      .subscribe((next: { result: Employees[], count: number }) => {
+        console.log(next);
+        this.employees = next.result;
+        this.count = next.count;
+        this.isInitLoading = false;
 
-      this.loadingMore = this.disableLoadMore();
-    });
+        this.canLoadingMore = this.disableLoadMore();
+      });
   }
 
   onLoadMore(): void {
-    this.loadingMore = true;
-    this.props.load_more(this.search_value, this.results.length)
+    this.canLoadingMore = true;
+    this.employeesService.load_more(this.search_value, this.employees.length)
       .subscribe(
         next => {
           console.log(next);
 
-          this.results = [...this.results, ...next];
-          this.loadingMore = this.disableLoadMore()
-          console.log(this.results.length);
+          this.employees = [...this.employees, ...next];
+          this.canLoadingMore = this.disableLoadMore()
+          console.log(this.employees.length);
         }
       )
   }
 
-  disableLoadMore() {
-    return this.count > this.results.length ? true : false;
+  disableLoadMore(): boolean {
+    return this.count > this.employees.length ? true : false;
   }
 
   recent_searches_manipulating(): void {
@@ -64,5 +65,8 @@ export class SearchResultsComponent implements OnInit {
 
   navigateToDetails(id) {
     this.router.navigate(['/property', id]);
+  }
+
+  ngOnDestroy() {
   }
 }

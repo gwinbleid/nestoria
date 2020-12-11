@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PropertySearchComponent } from './components/property-search/property-search.component';
+import { MainPageComponent } from './components/main/main-page.component';
 import { SearchResultsComponent } from './components/search-results/search-results.component';
-import { PropertyListingComponent } from './components/property-listing/property-listing.component';
+import { EmployeesDetailComponent } from './components/employees-detail/employees-detail.component';
 import { FavorsComponent } from './components/favors/favors.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
@@ -21,10 +21,10 @@ registerLocaleData(en);
 @NgModule({
   declarations: [
     AppComponent,
-    PropertySearchComponent,
+    MainPageComponent,
+    EmployeesDetailComponent,
     SearchResultsComponent,
-    PropertyListingComponent,
-    FavorsComponent
+    FavorsComponent,
   ],
   imports: [
     BrowserModule,

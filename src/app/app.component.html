@@ -1,12 +1,12 @@
-<nz-layout>
-    <nz-header>
+<nz-layout class="app__layout">
+    <nz-header class="app__header">
         <h1>Property Cross</h1>
-        <button  *ngIf="showFavorBtn" class="favors__btn" nz-button nzType="default" nzShape="round" (click)="toFavors()"><i nz-icon nzType="heart"></i>Favors</button>
+        <button *ngIf="canShowFavorBtn" class="favors__btn" nz-button nzType="default" nzShape="round" (click)="toFavors()"><i nz-icon nzType="heart"></i>Favors</button>
         <button class="theme__toggle__btn" nz-button nzType="primary" nzShape="round" (click)="changeTheme()"><i nz-icon nzType="clear"></i>Change theme</button>
     </nz-header>
-    <nz-content>
+    <nz-content class="app_content">
         <router-outlet></router-outlet>
     </nz-content>
-    <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer>
+    <nz-footer class="app__footer">Ant Design ©2020 Implement By Angular</nz-footer>
 </nz-layout>
 

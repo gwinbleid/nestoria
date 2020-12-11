@@ -7,21 +7,21 @@ import {
 import { EMPTY, Observable, of } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 import { Employees } from 'src/app/model/employee';
-import { PropertySearchService } from '../property-search.service';
+import { EmployeesService } from '../employees.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DetailResolver implements Resolve<Employees> {
   constructor(
-    private props: PropertySearchService,
+    private employeesService: EmployeesService,
     private router: Router
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Employees> {
     const id = route.paramMap.get('id');
 
-    return this.props.search_one(id).pipe(
+    return this.employeesService.search_one(id).pipe(
       tap(data => console.log()),
       mergeMap(res => {
         if (res) {

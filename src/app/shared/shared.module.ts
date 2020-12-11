@@ -15,6 +15,7 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzResultModule } from 'ng-zorro-antd/result';
+import { NzMessageModule } from 'ng-zorro-antd/message';
 
 @NgModule({
   imports: [ CommonModule ],
@@ -32,7 +33,8 @@ import { NzResultModule } from 'ng-zorro-antd/result';
     NzSkeletonModule,
     NzIconModule,
     NzMenuModule,
-    NzResultModule
+    NzResultModule,
+    NzMessageModule
   ]
 })
 export class SharedModule { }

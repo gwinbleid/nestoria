@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 
 @Component({
@@ -7,21 +7,15 @@ import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angula
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnInit {
-  showFavorBtn: boolean = true;
+  canShowFavorBtn: boolean = true;
   theme = '';
 
   constructor(private router: Router) {
     this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-          // Show loading indicator
-      }
+      if (event instanceof NavigationStart) { }
 
       if (event instanceof NavigationEnd) {
-        if (event.url === '/main' || event.urlAfterRedirects === '/main') {
-          this.showFavorBtn = true;
-        } else {
-          this.showFavorBtn = false
-        }
+        this.canShowFavorBtn = this.checkUrl(event); 
       }
 
       if (event instanceof NavigationError) {
@@ -63,5 +57,10 @@ export class AppComponent implements OnInit {
     };
 
     newThemeElement.href = themeUrl;
+  }
+
+  checkUrl(e): boolean {
+    if (e.url === '/main' || e.urlAfterRedirects === '/main') return true;
+    return false;
   }
 }
