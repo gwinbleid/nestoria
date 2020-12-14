@@ -14,7 +14,6 @@ const routes: Routes = [
     path: 'search', 
     component: SearchResultsComponent ,
     resolve: {
-      result: PropertySearchResolverService,
       count: CountResolverService
     }
   },

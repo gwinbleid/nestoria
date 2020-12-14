@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -23,6 +23,7 @@ export class MainPageComponent implements OnInit {
     private employeesService : EmployeesService,
     private router: Router,
     private message: NzMessageService,
+    private store: Store
   ) { }
 
   ngOnInit(): void {
@@ -40,6 +41,7 @@ export class MainPageComponent implements OnInit {
       .subscribe(
         next => {
           if (next.length) {
+            this.store.dispatch(allEmployeesLoaded({employees: next}))
             this.router.navigate(['/search', {find: this.searchRequestValue}]);
           } else {          
             this.message.create('info', `No Data`);

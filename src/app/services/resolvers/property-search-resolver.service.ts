@@ -27,8 +27,6 @@ export class PropertySearchResolverService implements Resolve<Employees[]> {
       map(data => data.slice(0, 10)),
       mergeMap(res => {
         if (res.length) {
-          console.log(res);
-          this.store.dispatch(allEmployeesLoaded({employees: res}))
           return of(res);
         } else { // id not found
           this.router.navigate(['/main']);
