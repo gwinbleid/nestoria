@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { noop } from 'rxjs';
-import { EmployeesService } from 'src/app/services/employees.service';
+import { EmployeesService } from '../../services/employees.service';
+import { AppState } from '../../state/index';
+import { allEmployeesLoaded } from '../../state/employees.actions';
 
 @Component({
   selector: 'app-main-page',
@@ -19,7 +22,7 @@ export class MainPageComponent implements OnInit {
   constructor(
     private employeesService : EmployeesService,
     private router: Router,
-    private message: NzMessageService  
+    private message: NzMessageService,
   ) { }
 
   ngOnInit(): void {
@@ -33,8 +36,6 @@ export class MainPageComponent implements OnInit {
   }
 
   search() {
-    this.serverError = false;
-
     this.employeesService.searchFirstTen(this.searchRequestValue)
       .subscribe(
         next => {

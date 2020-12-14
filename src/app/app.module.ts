@@ -15,6 +15,12 @@ import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { SharedModule } from './shared/shared.module';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { StoreModule } from '@ngrx/store';
+import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
+import { employeesReducer } from './state/reducers/employees.reducers';
+import { reducers } from './state';
 
 registerLocaleData(en);
 
@@ -34,7 +40,13 @@ registerLocaleData(en);
     HttpClientJsonpModule,
     BrowserAnimationsModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    StoreModule.forRoot(reducers),
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router',
+      routerState: RouterState.Minimal
+  })
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

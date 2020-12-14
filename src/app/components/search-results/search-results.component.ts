@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Data, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Employees } from 'src/app/model/employee';
 import { EmployeesService } from 'src/app/services/employees.service';
+import { allEmployeesLoaded } from 'src/app/state/employees.actions';
 
 @Component({
   selector: 'app-search-results',
@@ -44,7 +46,7 @@ export class SearchResultsComponent implements OnInit {
     this.employeesService.load_more(this.search_value, this.employees.length)
       .subscribe(
         next => {
-
+          
           this.employees = [...this.employees, ...next];
           this.canLoadingMore = this.disableLoadMore();
         }
