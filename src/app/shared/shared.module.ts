@@ -16,6 +16,12 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
+
+const ngZorroConfig: NzConfig = {
+  message: { nzTop: 120 },
+  notification: { nzTop: 240 }
+};
 
 @NgModule({
   imports: [ CommonModule ],
@@ -35,6 +41,9 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
     NzMenuModule,
     NzResultModule,
     NzMessageModule
-  ]
+  ],
+  providers: [
+    { provide: NZ_CONFIG, useValue: ngZorroConfig }
+  ],
 })
 export class SharedModule { }

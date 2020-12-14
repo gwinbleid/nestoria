@@ -22,7 +22,6 @@ export class DetailResolver implements Resolve<Employees> {
     const id = route.paramMap.get('id');
 
     return this.employeesService.search_one(id).pipe(
-      tap(data => console.log()),
       mergeMap(res => {
         if (res) {
           return of(res);

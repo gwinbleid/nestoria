@@ -21,7 +21,6 @@ export class PropertySearchResolverService implements Resolve<Employees[]> {
     
     return this.employeesService.search(id).pipe(
       map(data => data.slice(0, 10)),
-      tap(data => console.log()),
       mergeMap(res => {
         if (res.length) {
           return of(res);

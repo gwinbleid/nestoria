@@ -21,7 +21,6 @@ export class CountResolverService {
     
     return this.employeesService.search(id).pipe(
       map(data => data.length),
-      tap(data => console.log()),
       mergeMap(res => {
         return of(res);
       })

@@ -23,23 +23,25 @@ export class MainPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.storageInitManipulate();
+  }
+
+  storageInitManipulate(): void {
     let from_storage = JSON.parse(localStorage.getItem('recent_searches'));
     if (from_storage) this.recentSearches = this.recentSearches.concat(from_storage);
     if (!from_storage) localStorage.setItem('recent_searches', JSON.stringify(this.recentSearches));
   }
 
   search() {
-    console.log(this.searchRequestValue);
     this.serverError = false;
 
     this.employeesService.searchFirstTen(this.searchRequestValue)
       .subscribe(
         next => {
-          console.log(next);
           if (next.length) {
             this.router.navigate(['/search', {find: this.searchRequestValue}]);
           } else {          
-            this.isEmpty = true;
+            this.message.create('info', `No Data`);
           }
         },
         err => {

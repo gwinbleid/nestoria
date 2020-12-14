@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Employees } from 'src/app/model/employee';
 import { EmployeesService } from 'src/app/services/employees.service';
 
@@ -9,6 +10,7 @@ import { EmployeesService } from 'src/app/services/employees.service';
   styleUrls: ['./employees-detail.component.less']
 })
 export class EmployeesDetailComponent implements OnInit, OnDestroy {
+  routeSubscription$: Subscription;
   employeeID: string = '';
   employeeData ;
   isFavourite: boolean;
@@ -21,7 +23,11 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.employeeID = this.route.snapshot.params.id;
-    this.route.data
+    this.subscribeToRoute();
+  }
+
+  subscribeToRoute() {
+    this.routeSubscription$ = this.route.data
       .subscribe((next: {data: Employees}) => {
         this.employeeData = next.data;
         this.localStoreData = JSON.parse(localStorage.getItem('favour_employes'));
@@ -31,7 +37,7 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
         } else {
           this.isFavourite = false;
         }
-      })
+    })
   }
 
   toggleFavors() {
@@ -49,5 +55,7 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
     if (this.localStoreData) {
       localStorage.setItem('favour_employes', JSON.stringify(this.localStoreData));
     }
+
+    this.routeSubscription$.unsubscribe();
   }
 }

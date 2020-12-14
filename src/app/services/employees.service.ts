@@ -14,7 +14,6 @@ export class EmployeesService {
 
   search(search_data: string) {
     let search_value = search_data;
-    console.log(search_data)
 
     return this.http.get<Employees[]>(this.jsonUrl)
       .pipe(
@@ -32,8 +31,7 @@ export class EmployeesService {
         }))
       )
       .pipe(
-        map(data => data.slice(0, 10)),
-        tap(data => console.log()),
+        map(data => data.slice(0, 10))
       )
   }
 
