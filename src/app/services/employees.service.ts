@@ -18,7 +18,7 @@ export class EmployeesService {
     return this.http.get<Employees[]>(this.jsonUrl)
       .pipe(
         map(res => res.filter(item => {
-          return item['company'].includes(search_data.toUpperCase())
+          return item.company.includes(search_data.toUpperCase())
         }))
       )
   }
@@ -27,11 +27,13 @@ export class EmployeesService {
     return this.http.get<Employees[]>(this.jsonUrl)
       .pipe(
         map(res => res.filter(item => {
-          return item['company'].includes(search_data.toUpperCase())
+          return item.company.includes(search_data.toUpperCase())
         }))
       )
       .pipe(
-        map(data => data.slice(0, 10))
+        map(data => {
+          return {data: data.slice(0, 10), count: data.length}
+        })
       )
   }
 
@@ -39,7 +41,7 @@ export class EmployeesService {
     return this.http.get<Employees[]>(this.jsonUrl)
       .pipe(
         map(res => res.filter(item => {
-          return item['_id'] === id;
+          return item._id === id;
         })),
         take(1),
         flatMap(data => data)
@@ -50,7 +52,7 @@ export class EmployeesService {
     return this.http.get<Employees[]>(this.jsonUrl)
     .pipe(
       map(res => res.filter(item => {
-        return item['company'].includes(value.toUpperCase())
+        return item.company.includes(value.toUpperCase())
       })),
       map(res => res.slice(length, length + 10))
     )

@@ -1,14 +1,13 @@
 import { createAction, props } from "@ngrx/store";
-import { Employees } from "../model/employee";
 import { Searches } from "../model/search";
 
-export const loadAllEmployees = createAction(
-    "[Employees Resolver] Load All Employees"
+export const loadAllSearches = createAction(
+    "[Searches Resolver] Load All Recent Searches"
 );
 
-export const allEmployeesLoaded = createAction(
-    "[Load Employees Effect] All Employees Loaded",
-    props<{employees: Employees[], search: string}>()
+export const allSearchesLoaded = createAction(
+    "[Load Searches Effect] All Recent Searches Loaded",
+    props<{searches: Searches[]}>()
 );
 
 /*export const loadNextTenEmployees = createAction(
@@ -17,5 +16,5 @@ export const allEmployeesLoaded = createAction(
 
 export const nextTenEmployeesLoaded = createAction(
     "[Load Next Ten Employees Effect] Next Ten Employees Loaded",
-    props<{employees: Employees[]}>()
+    props<{searches: Searches[]}>()
 );*/

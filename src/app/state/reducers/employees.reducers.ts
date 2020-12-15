@@ -1,11 +1,12 @@
 import { createEntityAdapter, EntityState } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
+import { SearchResultsComponent } from "src/app/components/search-results/search-results.component";
 import { Employees } from "src/app/model/employee";
 import { EmployeesActions } from "../actions-types";
 
 export interface EmployeesState extends EntityState<Employees> {
     [x: string]: any;
-    allCoursesLoaded: boolean
+    searches: Object
 }
 
 export const adapter = createEntityAdapter<Employees>({
@@ -21,7 +22,8 @@ export const _employeesReducer = createReducer(
     on(EmployeesActions.allEmployeesLoaded,
             (state, action) => {
                 console.log('a');
-                return adapter.addMany(action.employees, {...state, allCoursesLoaded:true})
+                let obj = { [action.search] : [action.employees] }
+                return adapter.addMany(action.employees, {...state, searches: obj})
             }
 ));
 

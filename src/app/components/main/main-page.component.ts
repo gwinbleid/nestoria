@@ -6,11 +6,14 @@ import { noop } from 'rxjs';
 import { EmployeesService } from '../../services/employees.service';
 import { AppState } from '../../state/index';
 import { allEmployeesLoaded } from '../../state/employees.actions';
+import { allSearchesLoaded } from 'src/app/state/searches.actions';
+import { Searches } from 'src/app/model/search';
 
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.less']
+  styleUrls: ['./main-page.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainPageComponent implements OnInit {
 
@@ -40,8 +43,11 @@ export class MainPageComponent implements OnInit {
     this.employeesService.searchFirstTen(this.searchRequestValue)
       .subscribe(
         next => {
-          if (next.length) {
-            this.store.dispatch(allEmployeesLoaded({employees: next}))
+          console.log(next);
+          if (next.count) {
+            this.store.dispatch(allEmployeesLoaded({employees: next.data, search: this.searchRequestValue}));
+            let obj: Searches[] = [{id: this.searchRequestValue, results: next.data, count: next.count}];
+            this.store.dispatch(allSearchesLoaded({searches: obj}))
             this.router.navigate(['/search', {find: this.searchRequestValue}]);
           } else {          
             this.message.create('info', `No Data`);

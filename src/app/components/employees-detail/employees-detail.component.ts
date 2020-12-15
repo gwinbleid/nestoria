@@ -1,16 +1,18 @@
 import { getLocaleTimeFormat } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Employees } from 'src/app/model/employee';
 import { EmployeesService } from 'src/app/services/employees.service';
+import { allEmployeesLoaded } from 'src/app/state/employees.actions';
 import { selectExactEmployee } from 'src/app/state/employees.selectors';
 
 @Component({
   selector: 'app-employees-detail',
   templateUrl: './employees-detail.component.html',
-  styleUrls: ['./employees-detail.component.less']
+  styleUrls: ['./employees-detail.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmployeesDetailComponent implements OnInit, OnDestroy {
   routeSubscription$: Subscription;
@@ -75,7 +77,10 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
   fetchDataFromAPI(id) {
     this.employeesService.search_one(id)
       .subscribe(
-        next => this.employeeData = next
+        next => {
+          this.employeeData = next;
+          this.store.dispatch(allEmployeesLoaded({employees: [].concat(next), search: 'huita'}));
+        }
       );
   }
 

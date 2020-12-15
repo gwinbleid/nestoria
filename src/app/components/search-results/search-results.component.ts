@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Data, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Employees } from 'src/app/model/employee';
+import { Searches } from 'src/app/model/search';
 import { EmployeesService } from 'src/app/services/employees.service';
 import { allEmployeesLoaded } from 'src/app/state/employees.actions';
 import { selectAllEmployees } from 'src/app/state/employees.selectors';
+import { allSearchesLoaded } from 'src/app/state/searches.actions';
+import { selectAllSearches } from 'src/app/state/searches.selectors';
 
 @Component({
   selector: 'app-search-results',
   templateUrl: './search-results.component.html',
-  styleUrls: ['./search-results.component.less']
+  styleUrls: ['./search-results.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchResultsComponent implements OnInit {
   routerSubscription$: Subscription;
@@ -34,11 +38,12 @@ export class SearchResultsComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchValue = this.route.snapshot.params.find;
+    console.log(this.searchValue);
 
 
-    this.store.pipe(select(selectAllEmployees)).subscribe(next => {
+    this.store.pipe(select(selectAllSearches)).subscribe(next => {
       if (next.length) {
-        this.employees = next
+        this.employees = next[0].results;
       } else {
         this.getDataFromAPI(this.searchValue);
       }
@@ -46,8 +51,6 @@ export class SearchResultsComponent implements OnInit {
 
     this.recentSearchesManipulating();
     this.subscribeToRoute();
-
-    
   }
 
   subscribeToRoute(): void {
@@ -66,11 +69,13 @@ export class SearchResultsComponent implements OnInit {
   }
 
   getDataFromAPI(id) {
-    this.employeesService.search(id).pipe(
-      map(data => data.slice(0, 10))
-    ).subscribe(
-      next => this.employees = next
-    )
+    this.employeesService.searchFirstTen(id).subscribe(
+      next => {
+        this.employees = [...next.data];
+        let obj: Searches[] = [{id, results: next.data, count: next.count}];
+        this.store.dispatch(allSearchesLoaded({searches: obj}));
+        this.store.dispatch(allEmployeesLoaded({employees: next.data, search: id}));
+    })
   }
 
   onLoadMore(): void {
