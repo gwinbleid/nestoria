@@ -19,10 +19,7 @@ const routes: Routes = [
   },
   { 
     path: 'property/:id', 
-    component: EmployeesDetailComponent,
-    resolve: {
-      data: DetailResolver
-    }
+    component: EmployeesDetailComponent
   },
   { path: 'favourites', component: FavorsComponent },
   { path: '', redirectTo: 'main', pathMatch: 'full' },

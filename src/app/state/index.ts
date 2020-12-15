@@ -10,3 +10,4 @@ export const reducers: ActionReducerMap<AppState> = {
     router: routerReducer,
     employees: employeesReducer
 };
+    

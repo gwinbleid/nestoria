@@ -66,8 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   checkUrl(e): boolean {
-    if (e.url === '/main' || e.urlAfterRedirects === '/main') return true;
-    return false;
+    return (e.url === '/main' || e.urlAfterRedirects === '/main');
   }
 
   ngOnDestroy() {

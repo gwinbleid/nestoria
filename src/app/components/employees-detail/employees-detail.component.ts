@@ -1,8 +1,11 @@
+import { getLocaleTimeFormat } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Employees } from 'src/app/model/employee';
 import { EmployeesService } from 'src/app/services/employees.service';
+import { selectExactEmployee } from 'src/app/state/employees.selectors';
 
 @Component({
   selector: 'app-employees-detail',
@@ -12,18 +15,36 @@ import { EmployeesService } from 'src/app/services/employees.service';
 export class EmployeesDetailComponent implements OnInit, OnDestroy {
   routeSubscription$: Subscription;
   employeeID: string = '';
-  employeeData ;
+  employeeData: Employees;
   isFavourite: boolean;
   localStoreData: Employees[] | null;
 
   constructor(
     private route: ActivatedRoute,
-    private employeesService: EmployeesService
+    private employeesService: EmployeesService,
+    private store: Store
   ) { }
 
   ngOnInit(): void {
     this.employeeID = this.route.snapshot.params.id;
-    this.subscribeToRoute();
+
+    console.log('inui works');
+    this.getEmployee(this.route.snapshot.params.id);
+  }
+
+  getEmployee(id) {
+    console.log(id);
+    this.store.pipe(
+      select(selectExactEmployee(id))
+    ).subscribe(
+      next => {
+        if (!next.length) {
+          this.fetchDataFromAPI(id);
+        } else {
+          this.employeeData = next[0];
+        }
+      }
+    )
   }
 
   subscribeToRoute() {
@@ -51,11 +72,18 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  fetchDataFromAPI(id) {
+    this.employeesService.search_one(id)
+      .subscribe(
+        next => this.employeeData = next
+      );
+  }
+
   ngOnDestroy() {
     if (this.localStoreData) {
       localStorage.setItem('favour_employes', JSON.stringify(this.localStoreData));
     }
 
-    this.routeSubscription$.unsubscribe();
+    // this.routeSubscription$.unsubscribe();
   }
 }

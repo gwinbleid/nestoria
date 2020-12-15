@@ -4,6 +4,7 @@ import { Employees } from "src/app/model/employee";
 import { EmployeesActions } from "../actions-types";
 
 export interface EmployeesState extends EntityState<Employees> {
+    [x: string]: any;
     allCoursesLoaded: boolean
 }
 

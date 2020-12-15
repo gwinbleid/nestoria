@@ -10,3 +10,8 @@ export const selectAllEmployees = createSelector(
     selectEmployeesState,
     fromEmployees.selectAll
 );
+
+export const selectExactEmployee = (id) => createSelector(
+    selectAllEmployees,
+    data => data.filter(item => item._id === id)
+);

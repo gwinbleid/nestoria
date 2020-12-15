@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Data, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Employees } from 'src/app/model/employee';
 import { EmployeesService } from 'src/app/services/employees.service';
 import { allEmployeesLoaded } from 'src/app/state/employees.actions';
@@ -15,7 +16,7 @@ import { selectAllEmployees } from 'src/app/state/employees.selectors';
 export class SearchResultsComponent implements OnInit {
   routerSubscription$: Subscription;
   count: number;
-  search_value: any;
+  searchValue: any;
   isInitLoading: boolean = true; // bug
   canLoadingMore: boolean = true;
   employees = [];
@@ -24,13 +25,26 @@ export class SearchResultsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private employeesService: EmployeesService,
+
+
+
     private router: Router,
     private store: Store
   ) { }
 
   ngOnInit(): void {
-    this.search_value = this.route.snapshot.params.find;
-    this.recent_searches_manipulating();
+    this.searchValue = this.route.snapshot.params.find;
+
+
+    this.store.pipe(select(selectAllEmployees)).subscribe(next => {
+      if (next.length) {
+        this.employees = next
+      } else {
+        this.getDataFromAPI(this.searchValue);
+      }
+    });
+
+    this.recentSearchesManipulating();
     this.subscribeToRoute();
 
     
@@ -40,20 +54,28 @@ export class SearchResultsComponent implements OnInit {
     this.routerSubscription$ = this.route.data
       .subscribe((next: {count: number }) => {
         // this.employees = next.result;
-        this.store.pipe(select(selectAllEmployees)).subscribe(next => this.employees = next);
+        
         this.count = next.count;
         this.isInitLoading = false;
         this.canLoadingMore = this.disableLoadMore();
     });
   }
-
+  
   getDataFromStore() {
+    
+  }
 
+  getDataFromAPI(id) {
+    this.employeesService.search(id).pipe(
+      map(data => data.slice(0, 10))
+    ).subscribe(
+      next => this.employees = next
+    )
   }
 
   onLoadMore(): void {
     this.canLoadingMore = true;
-    this.employeesService.load_more(this.search_value, this.employees.length)
+    this.employeesService.load_more(this.searchValue, this.employees.length)
       .subscribe(
         next => {
           
@@ -68,9 +90,9 @@ export class SearchResultsComponent implements OnInit {
     return this.count > this.employees.length ? true : false;
   }
 
-  recent_searches_manipulating(): void {
+  recentSearchesManipulating(): void {
     let searches_storage = JSON.parse(localStorage.getItem('recent_searches'));
-    searches_storage = [this.search_value, ...searches_storage];
+    searches_storage = [this.searchValue, ...searches_storage];
     if (searches_storage.length > 5) searches_storage.pop();
     localStorage.setItem('recent_searches', JSON.stringify(searches_storage));
   }
@@ -83,3 +105,5 @@ export class SearchResultsComponent implements OnInit {
     this.routerSubscription$.unsubscribe();
   }
 }
+
+// nzSubtitle="{{employees.length}} items from {{count}}"
