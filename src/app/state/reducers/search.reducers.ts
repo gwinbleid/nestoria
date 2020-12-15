@@ -16,11 +16,20 @@ export const _searchesReducer = createReducer(
     initialSearchesState,
 
     on(SearchesActions.allSearchesLoaded,
-            (state, action) => {
-                console.log('a');
-                return adapter.addMany(action.searches, {...state})
-            }
-));
+        (state, action) => {
+            return adapter.addMany(action.searches, {...state})
+        }
+    ),
+
+    on(SearchesActions.nextTenEmployeesLoaded,
+        (state, action) => {
+            let searches = action.searches[0];
+            console.log(searches);
+            console.log(state);
+            return state;
+        }
+    )
+);
 
 export function searchesReducer(state, action) {
     return _searchesReducer(state, action);

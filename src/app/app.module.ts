@@ -21,6 +21,8 @@ import { StoreModule } from '@ngrx/store';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { employeesReducer } from './state/reducers/employees.reducers';
 import { reducers } from './state';
+import { EffectsModule } from '@ngrx/effects';
+import { SearchesEffects } from './state/searches.effects';
 
 registerLocaleData(en);
 
@@ -46,7 +48,8 @@ registerLocaleData(en);
     StoreRouterConnectingModule.forRoot({
       stateKey: 'router',
       routerState: RouterState.Minimal
-  })
+  }),
+    EffectsModule.forRoot([SearchesEffects])
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

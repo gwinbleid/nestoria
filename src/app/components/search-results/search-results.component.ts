@@ -8,7 +8,7 @@ import { Searches } from 'src/app/model/search';
 import { EmployeesService } from 'src/app/services/employees.service';
 import { allEmployeesLoaded } from 'src/app/state/employees.actions';
 import { selectAllEmployees } from 'src/app/state/employees.selectors';
-import { allSearchesLoaded } from 'src/app/state/searches.actions';
+import { allSearchesLoaded, loadNextTenEmployees, nextTenEmployeesLoaded } from 'src/app/state/searches.actions';
 import { selectAllSearches } from 'src/app/state/searches.selectors';
 
 @Component({
@@ -79,8 +79,9 @@ export class SearchResultsComponent implements OnInit {
   }
 
   onLoadMore(): void {
+    this.store.dispatch(loadNextTenEmployees({from: this.searchValue, to: this.employees.length}))
     this.canLoadingMore = true;
-    this.employeesService.load_more(this.searchValue, this.employees.length)
+    this.employeesService.loadMore(this.searchValue, this.employees.length)
       .subscribe(
         next => {
           
@@ -88,6 +89,10 @@ export class SearchResultsComponent implements OnInit {
           this.canLoadingMore = this.disableLoadMore();
         }
       )
+  }
+
+  onLoadMoreNew() {
+
   }
 
 

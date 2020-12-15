@@ -48,7 +48,7 @@ export class EmployeesService {
       )
   }
 
-  load_more(value, length) {
+  loadMore(value, length) {
     return this.http.get<Employees[]>(this.jsonUrl)
     .pipe(
       map(res => res.filter(item => {
