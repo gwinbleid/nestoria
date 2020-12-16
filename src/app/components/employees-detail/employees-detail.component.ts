@@ -14,7 +14,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 @Component({
   selector: 'app-employees-detail',
   templateUrl: './employees-detail.component.html',
-  styleUrls: ['./employees-detail.component.less'],
+  styleUrls: ['./employees-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmployeesDetailComponent implements OnInit, OnDestroy {
@@ -41,7 +41,7 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
     this.spinner.show();
 
     this.employeeID = this.route.snapshot.params.id;
-    this.getEmployee(this.route.snapshot.params.id);
+    this.getEmployee(this.employeeID);
   }
 
   getEmployee(id) {
@@ -54,13 +54,34 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
           this.spinner.hide();
           this.fetchDataFromAPI(id);
         } else {
-          this.employeeData = next[0];
-          this.spinner.hide();
-          this.isFavouriteCheck();
-          this.triggerDetection();
+          this.storeDataManupulate(next[0]);
         }
       }
     )
+  }
+
+  storeDataManupulate(value) {
+    this.employeeData = value;
+    this.spinner.hide();
+    this.isFavouriteCheck();
+    this.triggerDetection();
+  }
+
+  fetchDataFromAPI(id) {
+    this.employeesService.searchEmployeeById(id)
+      .subscribe(
+        next => {
+          this.apiDataManipulating(next);
+        },
+      );
+  }
+
+  apiDataManipulating(data) {
+    this.employeeData = data;
+    this.spinner.hide();
+    this.isFavouriteCheck();
+    this.store.dispatch(allEmployeesLoaded({employees: [].concat(data)}));
+    this.triggerDetection();
   }
 
   isFavouriteCheck(): void {
@@ -86,21 +107,6 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
     this.triggerDetection();
   }
 
-  fetchDataFromAPI(id) {
-    this.employeesService.searchEmployeeById(id)
-      .subscribe(
-        next => {
-          this.employeeData = next;
-          this.spinner.hide();
-          this.isFavouriteCheck();
-          this.store.dispatch(allEmployeesLoaded({employees: [].concat(next)}));
-          this.triggerDetection();
-        },
-
-
-      );
-  }
-
   triggerDetection() {
     if (!this.destroyed) {
       this.changeDetectorRef.detectChanges();
@@ -113,7 +119,5 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
     if (this.localStoreData) {
       localStorage.setItem('favour_employes', JSON.stringify(this.localStoreData));
     }
-
-    // this.routeSubscription$.unsubscribe();
   }
 }

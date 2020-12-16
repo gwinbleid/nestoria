@@ -17,7 +17,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 @Component({
   selector: 'app-search-results',
   templateUrl: './search-results.component.html',
-  styleUrls: ['./search-results.component.less'],
+  styleUrls: ['./search-results.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchResultsComponent implements OnInit {
@@ -45,6 +45,11 @@ export class SearchResultsComponent implements OnInit {
     this.isInitLoading = true;
     this.searchValue = this.route.snapshot.params.find;
 
+    this.storeManipulate();
+    this.recentSearchesManipulating();
+  }
+
+  storeManipulate() {
     this.storeSubscription$ = this.store.pipe(
       select(selectAllSearches),
       untilDestroyed(this)
@@ -52,33 +57,41 @@ export class SearchResultsComponent implements OnInit {
       let nextID = next.findIndex(item => item.id === this.searchValue);
       
       if (next.length && nextID !== -1) {
-        console.log(next);
-        this.employees = [...next[nextID].results];
-        this.count = next[nextID].count;
-        this.canLoadingMore = this.checkLoadMore();
-        this.spinner.hide();
-        this.triggerDetection();
+        this.storeDataHandle(next[nextID]);
       } else {
         this.getDataFromAPI(this.searchValue);
       }
     });
-
-    this.recentSearchesManipulating();
   }
 
-  getDataFromAPI(id) {
+  storeDataHandle(storeData) {
+    this.employees = [...storeData.results];
+    this.count = storeData.count;
+    this.canLoadingMore = this.checkLoadMore();
+    this.spinner.hide();
+    this.triggerDetection();
+  }
+
+  getDataFromAPI(id): void {
     this.employeesService.searchFirstTen(id).subscribe(
       next => {
-        
-        this.employees = [...this.employees, ...next.data];
-        this.count = next.count;
+        this.apiDataHandle(next);
         this.spinner.hide();
-        this.canLoadingMore = this.checkLoadMore();
-        let obj: Searches[] = [{id, results: next.data, count: next.count}];
-        this.store.dispatch(allSearchesLoaded({searches: obj}));
-        this.store.dispatch(allEmployeesLoaded({employees: next.data}));
+        this.apiStoreHandle(id, next);
         this.triggerDetection();
       })
+  }
+
+  apiDataHandle(next) {
+    this.employees = [...this.employees, ...next.data];
+    this.count = next.count;
+    this.canLoadingMore = this.checkLoadMore();
+  }
+
+  apiStoreHandle(id, next) {
+    let obj: Searches[] = [{id, results: next.data, count: next.count}];
+    this.store.dispatch(allSearchesLoaded({searches: obj}));
+    this.store.dispatch(allEmployeesLoaded({employees: next.data}));
   }
 
   onLoadMore(): void {
@@ -98,7 +111,7 @@ export class SearchResultsComponent implements OnInit {
     localStorage.setItem('recent_searches', JSON.stringify(searches_storage));
   }
 
-  navigateToDetails(id) {
+  navigateToDetails(id): void {
     this.router.navigate(['/property', id]);
   }
 

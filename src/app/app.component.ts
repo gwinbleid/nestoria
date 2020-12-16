@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.less'],
+  styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, OnDestroy {
@@ -14,9 +14,7 @@ export class AppComponent implements OnInit, OnDestroy {
   theme = '';
   isSpinnerVisible: boolean = false;
 
-  constructor(private router: Router) {
-    
-  }
+  constructor(private router: Router) { }
 
   ngOnInit() {
     this.routeSubsribe();
@@ -26,7 +24,6 @@ export class AppComponent implements OnInit, OnDestroy {
   routeSubsribe(): void {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
-        console.log('route');
         this.isSpinnerVisible = true;
       }
 

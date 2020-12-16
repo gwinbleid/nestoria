@@ -16,7 +16,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.less'],
+  styleUrls: ['./main-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainPageComponent implements OnInit {
@@ -55,40 +55,44 @@ export class MainPageComponent implements OnInit {
         this.spinner.hide();
         this.router.navigate(['/search', {find: this.searchRequestValue}]);
       } else {
-        this.employeesService.searchFirstTen(this.searchRequestValue)
-        .subscribe(
-          next => {
-            if (next.count) {
-              this.store.dispatch(allEmployeesLoaded({employees: next.data}));
-              let obj: Searches[] = [{id: this.searchRequestValue, results: next.data, count: next.count}];
-              this.store.dispatch(allSearchesLoaded({searches: obj}));
-              this.spinner.hide();
-              this.router.navigate(['/search', {find: this.searchRequestValue}]);
-            } else {          
-              this.spinner.hide();
-              this.message.create('info', `No Data`);
-            }
-          },
-          err => {
-            this.spinner.hide();
-            this.solveError(err);
-          }
-        )
+        this.fetchData();
       }
     });
 
     
   }
 
-  nextHandler(data, searchVal) {
-    
+  fetchData() {
+    this.employeesService.searchFirstTen(this.searchRequestValue)
+    .subscribe(
+      next => {
+        this.fetchRequestHandler(next);
+      },
+      err => {
+        this.spinner.hide();
+        this.generateError('error')
+      }
+    )
   }
 
-  solveError(err) {
-
+  fetchRequestHandler(data) {
+    if (data.count) {
+      this.sendDataToStore(data);
+      this.spinner.hide();
+      this.router.navigate(['/search', {find: this.searchRequestValue}]);
+    } else {          
+      this.spinner.hide();
+      this.message.create('info', `No Data`);
+    }
   }
 
-  generateError(type) {
+  sendDataToStore(data) {
+    this.store.dispatch(allEmployeesLoaded({employees: data.data}));
+    let obj: Searches[] = [{id: this.searchRequestValue, results: data.data, count: data.count}];
+    this.store.dispatch(allSearchesLoaded({searches: obj}));
+  }
+
+  generateError(type): void {
     this.employeesService.generatingErrorRequest()
       .subscribe(
         noop,

@@ -29,8 +29,7 @@
               }
             ],
             "styles": [
-              "src/theme.less",
-              "src/styles.less",
+              "src/styles.scss",
               "node_modules/typeface-lobster/index.css"
             ],
             "scripts": []
@@ -94,7 +93,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.scss"
             ],
             "scripts": []
           }
@@ -130,7 +129,7 @@
   "defaultProject": "nestoria",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "less"
+      "styleext": "scss"
     }
   }
 }
