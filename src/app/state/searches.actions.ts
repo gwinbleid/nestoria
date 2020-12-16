@@ -12,7 +12,7 @@ export const allSearchesLoaded = createAction(
 
 export const loadNextTenEmployees = createAction(
     "[Load Next Ten Employees Component] Load Next Employees",
-    props<{from: string, to: number}>()
+    props<{from: string, to: number, prevData: Searches[], count: number}>()
 );
 
 export const nextTenEmployeesLoaded = createAction(

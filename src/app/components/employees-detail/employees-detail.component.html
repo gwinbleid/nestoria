@@ -1,5 +1,7 @@
+<ngx-spinner bdColor="rgba(87, 85, 99, 0.9)"></ngx-spinner>
+
 <div class="container">
-    <nz-page-header nzBackIcon [nzGhost]="false">
+    <nz-page-header *ngIf="employeeData" nzBackIcon [nzGhost]="false">
         <nz-page-header-title>{{employeeData.name.first + ' ' + employeeData.name.last}}</nz-page-header-title>
         <nz-page-header-subtitle>{{employeeData.isActive ? 'Active' : 'Inactive'}}</nz-page-header-subtitle>
         <nz-page-header-extra>

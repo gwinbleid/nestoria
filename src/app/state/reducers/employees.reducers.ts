@@ -21,11 +21,17 @@ export const _employeesReducer = createReducer(
 
     on(EmployeesActions.allEmployeesLoaded,
             (state, action) => {
-                console.log('a');
-                let obj = { [action.search] : [action.employees] }
-                return adapter.addMany(action.employees, {...state, searches: obj})
+                return adapter.addMany(action.employees, {...state})
             }
-));
+    ),
+
+    on(EmployeesActions.additionallyEmployeesLoaded,
+        (state, action) => {
+            console.log('action works');
+            return adapter.upsertMany(action.additionalData, {...state})
+        }
+    )
+);
 
 export function employeesReducer(state, action) {
     return _employeesReducer(state, action);

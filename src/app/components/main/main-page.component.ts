@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { noop } from 'rxjs';
 import { EmployeesService } from '../../services/employees.service';
@@ -8,6 +8,8 @@ import { AppState } from '../../state/index';
 import { allEmployeesLoaded } from '../../state/employees.actions';
 import { allSearchesLoaded } from 'src/app/state/searches.actions';
 import { Searches } from 'src/app/model/search';
+import { NgxSpinnerService } from "ngx-spinner";
+import { selectAllSearches } from 'src/app/state/searches.selectors';
 
 @Component({
   selector: 'app-main-page',
@@ -26,7 +28,8 @@ export class MainPageComponent implements OnInit {
     private employeesService : EmployeesService,
     private router: Router,
     private message: NzMessageService,
-    private store: Store
+    private store: Store,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -40,23 +43,37 @@ export class MainPageComponent implements OnInit {
   }
 
   search() {
-    this.employeesService.searchFirstTen(this.searchRequestValue)
-      .subscribe(
-        next => {
-          console.log(next);
-          if (next.count) {
-            this.store.dispatch(allEmployeesLoaded({employees: next.data, search: this.searchRequestValue}));
-            let obj: Searches[] = [{id: this.searchRequestValue, results: next.data, count: next.count}];
-            this.store.dispatch(allSearchesLoaded({searches: obj}))
-            this.router.navigate(['/search', {find: this.searchRequestValue}]);
-          } else {          
-            this.message.create('info', `No Data`);
+    this.spinner.show();
+    this.store.pipe(select(selectAllSearches)).subscribe(next => {
+      console.log(next);
+      if (next.length && next.findIndex(item => item.id === this.searchRequestValue) !== -1) {
+        this.spinner.hide();
+        this.router.navigate(['/search', {find: this.searchRequestValue}]);
+      } else {
+        this.employeesService.searchFirstTen(this.searchRequestValue)
+        .subscribe(
+          next => {
+            console.log(next);
+            if (next.count) {
+              this.store.dispatch(allEmployeesLoaded({employees: next.data}));
+              let obj: Searches[] = [{id: this.searchRequestValue, results: next.data, count: next.count}];
+              this.store.dispatch(allSearchesLoaded({searches: obj}));
+              this.spinner.hide();
+              this.router.navigate(['/search', {find: this.searchRequestValue}]);
+            } else {          
+              this.spinner.hide();
+              this.message.create('info', `No Data`);
+            }
+          },
+          err => {
+            this.spinner.hide();
+            this.solveError(err);
           }
-        },
-        err => {
-          this.solveError(err);
-        }
-      )
+        )
+      }
+    });
+
+    
   }
 
   nextHandler(data, searchVal) {

@@ -46,4 +46,4 @@ const ngZorroConfig: NzConfig = {
     { provide: NZ_CONFIG, useValue: ngZorroConfig }
   ],
 })
-export class SharedModule { }
+export class AntModule { }

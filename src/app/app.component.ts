@@ -12,25 +12,32 @@ export class AppComponent implements OnInit, OnDestroy {
   routeSubscription$: Subscription;
   canShowFavorBtn: boolean = true;
   theme = '';
+  isSpinnerVisible: boolean = false;
 
   constructor(private router: Router) {
     
   }
 
   ngOnInit() {
-    this.routeSubscription$;
+    this.routeSubsribe();
     this.changeTheme();
   }
 
   routeSubsribe(): void {
-    this.routeSubscription$ = this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) { }
-
-      if (event instanceof NavigationEnd) {
-        this.canShowFavorBtn = this.checkUrl(event); 
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        console.log('route');
+        this.isSpinnerVisible = true;
       }
 
-      if (event instanceof NavigationError) { }
+      if (event instanceof NavigationEnd) {
+        this.canShowFavorBtn = this.checkUrl(event);
+        this.isSpinnerVisible = false; 
+      }
+
+      if (event instanceof NavigationError) {
+        
+      }
     });
   }
 

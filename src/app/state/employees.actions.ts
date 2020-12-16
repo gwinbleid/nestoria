@@ -8,8 +8,13 @@ export const loadAllEmployees = createAction(
 
 export const allEmployeesLoaded = createAction(
     "[Load Employees Effect] All Employees Loaded",
-    props<{employees: Employees[], search: string}>()
+    props<{employees: Employees[]}>()
 );
+
+export const additionallyEmployeesLoaded = createAction(
+    "[Load Additional Employees Search Effect] Additional Employees Loaded",
+    props<{additionalData: Employees[]}>()
+)
 
 /*export const loadNextTenEmployees = createAction(
     "[Load Next Ten Employees Component] Load Next Empoyees"

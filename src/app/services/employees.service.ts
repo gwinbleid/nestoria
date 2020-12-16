@@ -33,7 +33,8 @@ export class EmployeesService {
       .pipe(
         map(data => {
           return {data: data.slice(0, 10), count: data.length}
-        })
+        }),
+        delay(1500)
       )
   }
 

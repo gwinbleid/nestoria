@@ -24,9 +24,17 @@ export const _searchesReducer = createReducer(
     on(SearchesActions.nextTenEmployeesLoaded,
         (state, action) => {
             let searches = action.searches[0];
-            console.log(searches);
-            console.log(state);
-            return state;
+            //searches.count = state.entities[action.searches[0].id].count;
+            return {
+                ...state,
+                entities: {
+                    ...state.entities,
+                    [action.searches[0].id]: {
+                        ...state.entities[action.searches[0].id],
+                        results : searches.results
+                    }
+                }
+            };
         }
     )
 );

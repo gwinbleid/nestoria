@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Data, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
@@ -10,6 +10,7 @@ import { allEmployeesLoaded } from 'src/app/state/employees.actions';
 import { selectAllEmployees } from 'src/app/state/employees.selectors';
 import { allSearchesLoaded, loadNextTenEmployees, nextTenEmployeesLoaded } from 'src/app/state/searches.actions';
 import { selectAllSearches } from 'src/app/state/searches.selectors';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-search-results',
@@ -18,7 +19,9 @@ import { selectAllSearches } from 'src/app/state/searches.selectors';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchResultsComponent implements OnInit {
+  destroyed = false;
   routerSubscription$: Subscription;
+  storeSubscription$: Subscription;
   count: number;
   searchValue: any;
   isInitLoading: boolean = true; // bug
@@ -29,75 +32,58 @@ export class SearchResultsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private employeesService: EmployeesService,
-
-
-
+    private changeDetectorRef: ChangeDetectorRef,
     private router: Router,
-    private store: Store
+    private store: Store,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
+    this.spinner.show();
+    this.isInitLoading = true;
     this.searchValue = this.route.snapshot.params.find;
-    console.log(this.searchValue);
 
-
-    this.store.pipe(select(selectAllSearches)).subscribe(next => {
-      if (next.length) {
-        this.employees = next[0].results;
+    this.storeSubscription$ = this.store.pipe(select(selectAllSearches)).subscribe(next => {
+      let nextID = next.findIndex(item => item.id === this.searchValue);
+      
+      if (next.length && nextID !== -1) {
+        console.log(next);
+        this.employees = [...next[nextID].results];
+        this.count = next[nextID].count;
+        this.canLoadingMore = this.checkLoadMore();
+        this.spinner.hide();
+        this.triggerDetection();
       } else {
         this.getDataFromAPI(this.searchValue);
       }
     });
 
     this.recentSearchesManipulating();
-    this.subscribeToRoute();
-  }
-
-  subscribeToRoute(): void {
-    this.routerSubscription$ = this.route.data
-      .subscribe((next: {count: number }) => {
-        // this.employees = next.result;
-        
-        this.count = next.count;
-        this.isInitLoading = false;
-        this.canLoadingMore = this.disableLoadMore();
-    });
-  }
-  
-  getDataFromStore() {
-    
   }
 
   getDataFromAPI(id) {
     this.employeesService.searchFirstTen(id).subscribe(
       next => {
-        this.employees = [...next.data];
+        
+        this.employees = [...this.employees, ...next.data];
+        this.count = next.count;
+        this.spinner.hide();
+        this.canLoadingMore = this.checkLoadMore();
         let obj: Searches[] = [{id, results: next.data, count: next.count}];
         this.store.dispatch(allSearchesLoaded({searches: obj}));
-        this.store.dispatch(allEmployeesLoaded({employees: next.data, search: id}));
-    })
+        this.store.dispatch(allEmployeesLoaded({employees: next.data}));
+        this.triggerDetection();
+      })
   }
 
   onLoadMore(): void {
-    this.store.dispatch(loadNextTenEmployees({from: this.searchValue, to: this.employees.length}))
-    this.canLoadingMore = true;
-    this.employeesService.loadMore(this.searchValue, this.employees.length)
-      .subscribe(
-        next => {
-          
-          this.employees = [...this.employees, ...next];
-          this.canLoadingMore = this.disableLoadMore();
-        }
-      )
-  }
-
-  onLoadMoreNew() {
-
+    this.spinner.show();
+    this.store.dispatch(loadNextTenEmployees({from: this.searchValue, to: this.employees.length, prevData: this.employees, count: this.count}))
   }
 
 
-  disableLoadMore(): boolean {
-    return this.count > this.employees.length ? true : false;
+  checkLoadMore(): boolean {
+    return this.count > this.employees.length;
   }
 
   recentSearchesManipulating(): void {
@@ -111,9 +97,15 @@ export class SearchResultsComponent implements OnInit {
     this.router.navigate(['/property', id]);
   }
 
+  triggerDetection() {
+    if (!this.destroyed) {
+      this.changeDetectorRef.detectChanges();
+    }
+  }
+
   ngOnDestroy() {
-    this.routerSubscription$.unsubscribe();
+    this.storeSubscription$.unsubscribe();
+    this.destroyed = true;
+    
   }
 }
-
-// nzSubtitle="{{employees.length}} items from {{count}}"

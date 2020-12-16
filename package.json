@@ -25,6 +25,7 @@
     "@ngrx/store": "^10.1.0",
     "@ngrx/store-devtools": "^10.1.0",
     "ng-zorro-antd": "^10.2.0",
+    "ngx-spinner": "^10.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "typeface-lobster": "^1.1.13",

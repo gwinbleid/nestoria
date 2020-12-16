@@ -14,7 +14,7 @@ import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
-import { SharedModule } from './shared/shared.module';
+import { AntModule } from './ant.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { StoreModule } from '@ngrx/store';
@@ -23,6 +23,7 @@ import { employeesReducer } from './state/reducers/employees.reducers';
 import { reducers } from './state';
 import { EffectsModule } from '@ngrx/effects';
 import { SearchesEffects } from './state/searches.effects';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 registerLocaleData(en);
 
@@ -41,8 +42,9 @@ registerLocaleData(en);
     HttpClientModule,
     HttpClientJsonpModule,
     BrowserAnimationsModule,
-    SharedModule,
+    AntModule,
     FormsModule,
+    NgxSpinnerModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
     StoreRouterConnectingModule.forRoot({
