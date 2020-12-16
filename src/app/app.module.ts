@@ -25,6 +25,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { SearchesEffects } from './state/searches.effects';
 import { NgxSpinnerModule } from "ngx-spinner";
 
+
 registerLocaleData(en);
 
 @NgModule({

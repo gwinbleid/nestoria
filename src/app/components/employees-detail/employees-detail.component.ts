@@ -1,4 +1,3 @@
-import { getLocaleTimeFormat } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -8,7 +7,10 @@ import { EmployeesService } from 'src/app/services/employees.service';
 import { allEmployeesLoaded } from 'src/app/state/employees.actions';
 import { selectExactEmployee } from 'src/app/state/employees.selectors';
 import { NgxSpinnerService } from "ngx-spinner";
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+
+@UntilDestroy()
 @Component({
   selector: 'app-employees-detail',
   templateUrl: './employees-detail.component.html',
@@ -18,6 +20,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 export class EmployeesDetailComponent implements OnInit, OnDestroy {
   destroyed = false;
 
+  storeSubscription$: Subscription;
   routeSubscription$: Subscription;
   employeeID: string = '';
   employeeData: Employees;
@@ -42,8 +45,9 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
   }
 
   getEmployee(id) {
-    this.store.pipe(
-      select(selectExactEmployee(id))
+    this.storeSubscription$ = this.store.pipe(
+      select(selectExactEmployee(id)),
+      untilDestroyed(this)
     ).subscribe(
       next => {
         if (!next.length) {
@@ -83,7 +87,7 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
   }
 
   fetchDataFromAPI(id) {
-    this.employeesService.search_one(id)
+    this.employeesService.searchEmployeeById(id)
       .subscribe(
         next => {
           this.employeeData = next;

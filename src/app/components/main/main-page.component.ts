@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { noop } from 'rxjs';
+import { noop, Subscription } from 'rxjs';
 import { EmployeesService } from '../../services/employees.service';
 import { AppState } from '../../state/index';
 import { allEmployeesLoaded } from '../../state/employees.actions';
@@ -10,7 +10,9 @@ import { allSearchesLoaded } from 'src/app/state/searches.actions';
 import { Searches } from 'src/app/model/search';
 import { NgxSpinnerService } from "ngx-spinner";
 import { selectAllSearches } from 'src/app/state/searches.selectors';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
@@ -19,6 +21,7 @@ import { selectAllSearches } from 'src/app/state/searches.selectors';
 })
 export class MainPageComponent implements OnInit {
 
+  storeSelector$: Subscription;
   searchRequestValue?: string;
   isEmpty: boolean = false;
   recentSearches = [];
@@ -44,8 +47,10 @@ export class MainPageComponent implements OnInit {
 
   search() {
     this.spinner.show();
-    this.store.pipe(select(selectAllSearches)).subscribe(next => {
-      console.log(next);
+    this.storeSelector$ = this.store.pipe(
+      select(selectAllSearches),
+      untilDestroyed(this)
+    ).subscribe(next => {
       if (next.length && next.findIndex(item => item.id === this.searchRequestValue) !== -1) {
         this.spinner.hide();
         this.router.navigate(['/search', {find: this.searchRequestValue}]);
@@ -53,7 +58,6 @@ export class MainPageComponent implements OnInit {
         this.employeesService.searchFirstTen(this.searchRequestValue)
         .subscribe(
           next => {
-            console.log(next);
             if (next.count) {
               this.store.dispatch(allEmployeesLoaded({employees: next.data}));
               let obj: Searches[] = [{id: this.searchRequestValue, results: next.data, count: next.count}];

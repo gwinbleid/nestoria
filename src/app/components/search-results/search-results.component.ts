@@ -11,7 +11,9 @@ import { selectAllEmployees } from 'src/app/state/employees.selectors';
 import { allSearchesLoaded, loadNextTenEmployees, nextTenEmployeesLoaded } from 'src/app/state/searches.actions';
 import { selectAllSearches } from 'src/app/state/searches.selectors';
 import { NgxSpinnerService } from "ngx-spinner";
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-search-results',
   templateUrl: './search-results.component.html',
@@ -43,7 +45,10 @@ export class SearchResultsComponent implements OnInit {
     this.isInitLoading = true;
     this.searchValue = this.route.snapshot.params.find;
 
-    this.storeSubscription$ = this.store.pipe(select(selectAllSearches)).subscribe(next => {
+    this.storeSubscription$ = this.store.pipe(
+      select(selectAllSearches),
+      untilDestroyed(this)
+    ).subscribe(next => {
       let nextID = next.findIndex(item => item.id === this.searchValue);
       
       if (next.length && nextID !== -1) {
@@ -104,8 +109,6 @@ export class SearchResultsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.storeSubscription$.unsubscribe();
     this.destroyed = true;
-    
   }
 }

@@ -12,13 +12,13 @@ export class EmployeesService {
 
   constructor(private http: HttpClient) { }
 
-  search(search_data: string) {
-    let search_value = search_data;
+  search(value: string) {
+    let searchData = value;
 
     return this.http.get<Employees[]>(this.jsonUrl)
       .pipe(
         map(res => res.filter(item => {
-          return item.company.includes(search_data.toUpperCase())
+          return item.company.includes(searchData.toUpperCase())
         }))
       )
   }
@@ -38,7 +38,7 @@ export class EmployeesService {
       )
   }
 
-  search_one(id) {
+  searchEmployeeById(id) {
     return this.http.get<Employees[]>(this.jsonUrl)
       .pipe(
         map(res => res.filter(item => {
