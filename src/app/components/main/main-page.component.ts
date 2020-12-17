@@ -1,25 +1,37 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { noop } from 'rxjs';
-import { EmployeesService } from 'src/app/services/employees.service';
+import { noop, Subscription } from 'rxjs';
+import { EmployeesService } from '../../services/employees.service';
+import { allEmployeesLoaded } from '../../state/employees.actions';
+import { allSearchesLoaded } from 'src/app/state/searches.actions';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { selectAllSearches } from 'src/app/state/searches.selectors';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import Searches from '../../model/search.model';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
+@UntilDestroy()
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.less']
+  styleUrls: ['./main-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainPageComponent implements OnInit {
 
+  storeSelector$: Subscription;
   searchRequestValue?: string;
-  isEmpty: boolean = false;
+  isEmpty = false;
   recentSearches = [];
-  serverError: boolean = false;
 
   constructor(
-    private employeesService : EmployeesService,
+    private employeesService: EmployeesService,
     private router: Router,
-    private message: NzMessageService  
+    private message: NzMessageService,
+    private store: Store,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -27,38 +39,67 @@ export class MainPageComponent implements OnInit {
   }
 
   storageInitManipulate(): void {
-    let from_storage = JSON.parse(localStorage.getItem('recent_searches'));
-    if (from_storage) this.recentSearches = this.recentSearches.concat(from_storage);
-    if (!from_storage) localStorage.setItem('recent_searches', JSON.stringify(this.recentSearches));
+    const fromStorage = JSON.parse(localStorage.getItem('recent_searches'));
+
+    fromStorage ? this.recentSearches = this.recentSearches.concat(fromStorage)
+      : localStorage.setItem('recent_searches', JSON.stringify(this.recentSearches));
   }
 
-  search() {
-    this.serverError = false;
+  search(): void {
+    this.spinner.show();
+    this.storeSelector$ = this.store.pipe(
+      select(selectAllSearches),
+      untilDestroyed(this)
+    ).subscribe(next => {
+      this.checkStoreValue(next) ? this.searchNavigate() : this.fetchData();
+    });
+  }
+
+  searchNavigate() {
+    this.spinner.hide();
+    this.router.navigate(['/search', {find: this.searchRequestValue}]);
+  }
+
+  checkStoreValue(next): boolean {
+    return next.length && next.findIndex(item => item.id === this.searchRequestValue) !== -1
+  }
+
+  fetchData(): void {
+    if (!this.searchRequestValue) {
+      this.noDataHandler();
+      return;
+    }
 
     this.employeesService.searchFirstTen(this.searchRequestValue)
-      .subscribe(
-        next => {
-          if (next.length) {
-            this.router.navigate(['/search', {find: this.searchRequestValue}]);
-          } else {          
-            this.message.create('info', `No Data`);
-          }
-        },
-        err => {
-          this.solveError(err);
-        }
-      )
+    .subscribe(
+      next => {
+        this.fetchRequestHandler(next);
+      },
+      err => {
+        this.spinner.hide();
+        this.generateError('error');
+      }
+    );
   }
 
-  nextHandler(data, searchVal) {
-    
+  fetchRequestHandler(data): void {
+    data.count ? this.sendDataToStore(data) : this.noDataHandler();
   }
 
-  solveError(err) {
-
+  sendDataToStore(data): void {
+    this.store.dispatch(allEmployeesLoaded({employees: data.data}));
+    const obj: Searches[] = [{id: this.searchRequestValue, results: data.data, count: data.count}];
+    this.store.dispatch(allSearchesLoaded({searches: obj}));
+    this.spinner.hide();
+    this.router.navigate(['/search', {find: this.searchRequestValue}]);
   }
 
-  generateError(type) {
+  noDataHandler() {
+    this.spinner.hide();
+    this.message.create('info', `No Data`);
+  }
+
+  generateError(type): void {
     this.employeesService.generatingErrorRequest()
       .subscribe(
         noop,
@@ -71,5 +112,4 @@ export class MainPageComponent implements OnInit {
   createMessage(type: string): void {
     this.message.create(type, `Server ${type}`);
   }
-
 }

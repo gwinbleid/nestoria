@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { filter, flatMap, map, tap, take, mergeMap, delay, catchError } from 'rxjs/operators'
-import { Employees } from '../model/employee';
 import { EMPTY, of, throwError } from 'rxjs';
+import Employees from '../model/employee.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +13,13 @@ export class EmployeesService {
 
   constructor(private http: HttpClient) { }
 
-  search(search_data: string) {
-    let search_value = search_data;
+  search(value: string) {
+    let searchData = value;
 
     return this.http.get<Employees[]>(this.jsonUrl)
       .pipe(
         map(res => res.filter(item => {
-          return item['company'].includes(search_data.toUpperCase())
+          return item.company.includes(searchData.toUpperCase())
         }))
       )
   }
@@ -27,32 +28,37 @@ export class EmployeesService {
     return this.http.get<Employees[]>(this.jsonUrl)
       .pipe(
         map(res => res.filter(item => {
-          return item['company'].includes(search_data.toUpperCase())
+          return item.company.includes(search_data.toUpperCase())
         }))
       )
       .pipe(
-        map(data => data.slice(0, 10))
+        map(data => {
+          return {data: data.slice(0, 10), count: data.length}
+        }),
+        delay(1500)
       )
   }
 
-  search_one(id) {
+  searchEmployeeById(id) {
     return this.http.get<Employees[]>(this.jsonUrl)
       .pipe(
         map(res => res.filter(item => {
-          return item['_id'] === id;
+          return item._id === id;
         })),
         take(1),
-        flatMap(data => data)
+        flatMap(data => data),
+        delay(700)
       )
   }
 
-  load_more(value, length) {
+  loadMore(value, length) {
     return this.http.get<Employees[]>(this.jsonUrl)
     .pipe(
       map(res => res.filter(item => {
-        return item['company'].includes(value.toUpperCase())
+        return item.company.includes(value.toUpperCase())
       })),
-      map(res => res.slice(length, length + 10))
+      map(res => res.slice(length, length + 10)),
+      delay(700)
     )
   }
 

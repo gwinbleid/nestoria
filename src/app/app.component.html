@@ -4,7 +4,7 @@
         <button *ngIf="canShowFavorBtn" class="favors__btn" nz-button nzType="default" nzShape="round" (click)="toFavors()"><i nz-icon nzType="heart"></i>Favors</button>
         <button class="theme__toggle__btn" nz-button nzType="primary" nzShape="round" (click)="changeTheme()"><i nz-icon nzType="clear"></i>Change theme</button>
     </nz-header>
-    <nz-content class="app_content">
+    <nz-content class="app__content">
         <router-outlet></router-outlet>
     </nz-content>
     <nz-footer class="app__footer">Ant Design ©2020 Implement By Angular</nz-footer>

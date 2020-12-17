@@ -1,6 +1,9 @@
-<nz-page-header class="site-page-header" nzBackIcon nzTitle='Search Result of: {{search_value}}' nzSubtitle="{{employees.length}} items from {{count}}">
+<ngx-spinner bdColor="rgba(87, 85, 99, 0.9)"></ngx-spinner>
+
+<nz-page-header class="site-page-header" nzBackIcon nzTitle='Search Result of: {{searchValue}}' nzSubtitle="{{employees.length}} items from {{count}}">
   <nz-page-header-content>
-    <nz-list class="demo-loadmore-list" [nzLoading]="isInitLoading">
+    
+    <nz-list class="demo-loadmore-list">
       <nz-list-item *ngFor="let item of employees">
         <ng-container *ngIf="!item.loading">
           <nz-list-item-meta

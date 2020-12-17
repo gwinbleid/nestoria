@@ -1,4 +1,4 @@
-export interface Employees {
+export default interface Employees {
     _id: string,
     index: number,
     guid: string,
@@ -7,7 +7,7 @@ export interface Employees {
     picture: string,
     age: number,
     eyeColor: string,
-    name: Object
+    name: Name
     company: string,
     email: string,
     phone: string,
@@ -21,4 +21,9 @@ export interface Employees {
     friends: Object[],
     greeting: string,
     favoriteFruit: string
+}
+
+export interface Name {
+    first: string;
+    last: string
 }

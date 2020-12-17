@@ -1,7 +1,13 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-// ng-zorro-ant elements
+import { LazyRoutingModule } from './lazy-routing.module';
+import { EmployeesDetailComponent } from './employees-detail/employees-detail.component';
+import { FavorsComponent } from './favors/favors.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
+import { NgxSpinnerModule } from "ngx-spinner";
+
+// NG-Zorro Modules
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -15,7 +21,6 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzResultModule } from 'ng-zorro-antd/result';
-import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
 
 const ngZorroConfig: NzConfig = {
@@ -24,9 +29,15 @@ const ngZorroConfig: NzConfig = {
 };
 
 @NgModule({
-  imports: [ CommonModule ],
-  exports: [
+  declarations: [
+    EmployeesDetailComponent,
+    SearchResultsComponent,
+    FavorsComponent,],
+  imports: [
     CommonModule,
+    LazyRoutingModule,
+    // UI imports
+    NgxSpinnerModule,
     NzButtonModule,
     NzSpinModule,
     NzTableModule,
@@ -40,10 +51,7 @@ const ngZorroConfig: NzConfig = {
     NzIconModule,
     NzMenuModule,
     NzResultModule,
-    NzMessageModule
   ],
-  providers: [
-    { provide: NZ_CONFIG, useValue: ngZorroConfig }
-  ],
+  providers: [{ provide: NZ_CONFIG, useValue: ngZorroConfig }]
 })
-export class SharedModule { }
+export class LazyModule { }

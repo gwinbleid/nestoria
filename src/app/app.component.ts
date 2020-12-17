@@ -1,44 +1,46 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.less'],
+  styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
   routeSubscription$: Subscription;
-  canShowFavorBtn: boolean = true;
+  canShowFavorBtn = true;
   theme = '';
 
-  constructor(private router: Router) {
-    
-  }
+  constructor(private router: Router) { }
 
-  ngOnInit() {
-    this.routeSubscription$;
+  ngOnInit(): void {
+    this.routeSubsribe();
     this.changeTheme();
   }
 
   routeSubsribe(): void {
-    this.routeSubscription$ = this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) { }
-
-      if (event instanceof NavigationEnd) {
-        this.canShowFavorBtn = this.checkUrl(event); 
-      }
-
-      if (event instanceof NavigationError) { }
-    });
+    this.router.events
+      .pipe(untilDestroyed(this))
+      .subscribe((event) => {
+        if (event instanceof NavigationStart) { }
+  
+        if (event instanceof NavigationEnd) {
+          this.canShowFavorBtn = this.checkUrl(event);
+        }
+  
+        if (event instanceof NavigationError) { }
+      });
   }
 
-  toFavors() {
-    this.router.navigate(['/favourites']);
+  toFavors(): void {
+    this.router.navigate(['search', 'favourites']);
   }
 
-  changeTheme() {
+  changeTheme(): void {
     this.theme = this.theme === 'dark' ? '' : 'dark';
 
     let themeUrl = './assets/themes/compact.css';
@@ -66,11 +68,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   checkUrl(e): boolean {
-    if (e.url === '/main' || e.urlAfterRedirects === '/main') return true;
-    return false;
-  }
-
-  ngOnDestroy() {
-    this.routeSubscription$.unsubscribe();
+    return (e.url === '/main' || e.urlAfterRedirects === '/main');
   }
 }

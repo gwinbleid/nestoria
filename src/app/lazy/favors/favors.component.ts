@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Employees } from 'src/app/model/employee';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import Employees from 'src/app/model/employee.model';
 
 @Component({
   selector: 'app-favors',
   templateUrl: './favors.component.html',
-  styleUrls: ['./favors.component.less']
+  styleUrls: ['./favors.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FavorsComponent implements OnInit {
   isInitLoading = false;
