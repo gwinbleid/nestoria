@@ -4,10 +4,9 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainPageComponent } from './components/main/main-page.component';
-import { SearchResultsComponent } from './lazy/search-results/search-results.component';
-import { EmployeesDetailComponent } from './lazy/employees-detail/employees-detail.component';
-import { FavorsComponent } from './lazy/favors/favors.component';
+import { FormPageComponent } from './form-page/form-page.component';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
@@ -32,6 +31,8 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
 
+import { NzFormModule } from 'ng-zorro-antd/form';
+
 registerLocaleData(en);
 
 
@@ -44,12 +45,14 @@ const ngZorroConfig: NzConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    MainPageComponent
+    MainPageComponent,
+    FormPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     HttpClientJsonpModule,
     BrowserAnimationsModule,

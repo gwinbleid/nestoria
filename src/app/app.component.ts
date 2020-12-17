@@ -40,6 +40,10 @@ export class AppComponent implements OnInit {
     this.router.navigate(['search', 'favourites']);
   }
 
+  moveToForm(): void {
+    this.router.navigate(['form']);
+  }
+
   changeTheme(): void {
     this.theme = this.theme === 'dark' ? '' : 'dark';
 

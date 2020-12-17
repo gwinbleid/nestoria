@@ -1,0 +1,43 @@
+@mixin flex-config ($dir, $justify, $align) {
+    display: flex;
+
+    @if $dir != false {
+        flex-direction: $dir;
+    }
+
+    @if $justify != false {
+        justify-content: $justify;
+    }
+
+    @if $align != false {
+        align-items: $align;
+    }
+}
+
+.container {
+    @include flex-config(column, center, center);
+    height: 100%;
+
+    form {
+        @include flex-config(column, center, center);
+
+        background: linear-gradient(135deg, rgba(127,126,158,0.8491771708683473) 23%, rgba(121,117,175,0.3868613138686131) 70%);        border-radius: 20px;
+        padding: 20px;
+
+        .form__group {
+            @include flex-config(column, center, center);
+        }
+
+        label {
+            width: 100%;
+            margin-bottom: 10px;
+
+            input {
+                @include flex-config(row, center, center);
+                width: 300px;
+            }
+        }
+
+        
+    }
+}
