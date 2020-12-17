@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+UntilDestroy()
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
   title = 'nestoria';
   routeSubscription$: Subscription;
   canShowFavorBtn = true;
@@ -23,20 +25,22 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   routeSubsribe(): void {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        this.isSpinnerVisible = true;
-      }
-
-      if (event instanceof NavigationEnd) {
-        this.canShowFavorBtn = this.checkUrl(event);
-        this.isSpinnerVisible = false;
-      }
-
-      if (event instanceof NavigationError) {
-
-      }
-    });
+    this.router.events
+      .pipe(untilDestroyed(this))
+      .subscribe((event) => {
+        if (event instanceof NavigationStart) {
+          this.isSpinnerVisible = true;
+        }
+  
+        if (event instanceof NavigationEnd) {
+          this.canShowFavorBtn = this.checkUrl(event);
+          this.isSpinnerVisible = false;
+        }
+  
+        if (event instanceof NavigationError) {
+  
+        }
+      });
   }
 
   toFavors(): void {
@@ -72,9 +76,5 @@ export class AppComponent implements OnInit, OnDestroy {
 
   checkUrl(e): boolean {
     return (e.url === '/main' || e.urlAfterRedirects === '/main');
-  }
-
-  ngOnDestroy(): void {
-    this.routeSubscription$.unsubscribe();
   }
 }
