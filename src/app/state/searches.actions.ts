@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Searches } from "../model/search";
+import Searches from "../model/search.model";
 
 export const loadAllSearches = createAction(
     "[Searches Resolver] Load All Recent Searches"

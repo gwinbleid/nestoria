@@ -1,7 +1,7 @@
 import { createEntityAdapter, EntityState } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
-import { Searches } from "src/app/model/search";
 import { SearchesActions } from "../actions-types";
+import Searches from "src/app/model/search.model";
 
 export interface SearchesState extends EntityState<Searches> {
     [x: string]: any;

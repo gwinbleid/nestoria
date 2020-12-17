@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Employees } from 'src/app/model/employee';
+import Employees from 'src/app/model/employee.model';
 
 @Component({
   selector: 'app-favors',

@@ -1,6 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Employees } from "../model/employee";
-import { Searches } from "../model/search";
+import Employees from "../model/employee.model";
 
 export const loadAllEmployees = createAction(
     "[Employees Resolver] Load All Employees"

@@ -1,4 +1,4 @@
-export interface Employees {
+export default interface Employees {
     _id: string,
     index: number,
     guid: string,

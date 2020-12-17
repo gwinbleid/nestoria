@@ -3,8 +3,6 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Data, Router } from '@angular/r
 import { select, Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Employees } from 'src/app/model/employee';
-import { Searches } from 'src/app/model/search';
 import { EmployeesService } from 'src/app/services/employees.service';
 import { allEmployeesLoaded } from 'src/app/state/employees.actions';
 import { selectAllEmployees } from 'src/app/state/employees.selectors';
@@ -12,6 +10,9 @@ import { allSearchesLoaded, loadNextTenEmployees, nextTenEmployeesLoaded } from 
 import { selectAllSearches } from 'src/app/state/searches.selectors';
 import { NgxSpinnerService } from "ngx-spinner";
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
+import  Employees  from 'src/app/model/employee.model';
+import Searches from 'src/app/model/search.model';
 
 @UntilDestroy()
 @Component({

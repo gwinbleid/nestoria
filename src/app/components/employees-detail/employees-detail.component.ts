@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { Employees } from 'src/app/model/employee';
 import { EmployeesService } from 'src/app/services/employees.service';
 import { allEmployeesLoaded } from 'src/app/state/employees.actions';
 import { selectExactEmployee } from 'src/app/state/employees.selectors';
 import { NgxSpinnerService } from "ngx-spinner";
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import Employees from 'src/app/model/employee.model';
 
 
 @UntilDestroy()

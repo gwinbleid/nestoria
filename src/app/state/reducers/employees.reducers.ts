@@ -1,11 +1,11 @@
 import { createEntityAdapter, EntityState } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
-import { SearchResultsComponent } from "src/app/components/search-results/search-results.component";
-import { Employees } from "src/app/model/employee";
 import { EmployeesActions } from "../actions-types";
 
+import Employees from "src/app/model/employee.model";
+
 export interface EmployeesState extends EntityState<Employees> {
-    [x: string]: any;
+    [key: string]: any;
     searches: Object
 }
 

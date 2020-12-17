@@ -26,7 +26,7 @@ export class SearchesEffects {
             switchMap(nextTen => {
                     let searchObject = { id: query, results: [...this.previousdata, ...nextTen], count: this.count }
                     return [
-                        nextTenEmployeesLoaded({searches: [].concat(searchObject)}),
+                        nextTenEmployeesLoaded({searches: [searchObject]}),
                         additionallyEmployeesLoaded({additionalData: nextTen})
                     ];
                 })

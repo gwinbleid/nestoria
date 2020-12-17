@@ -6,10 +6,10 @@ import { noop, Subscription } from 'rxjs';
 import { EmployeesService } from '../../services/employees.service';
 import { allEmployeesLoaded } from '../../state/employees.actions';
 import { allSearchesLoaded } from 'src/app/state/searches.actions';
-import { Searches } from 'src/app/model/search';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { selectAllSearches } from 'src/app/state/searches.selectors';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import Searches from '../../model/search.model';
 
 @UntilDestroy()
 @Component({

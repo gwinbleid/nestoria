@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { filter, flatMap, map, tap, take, mergeMap, delay, catchError } from 'rxjs/operators'
-import { Employees } from '../model/employee';
 import { EMPTY, of, throwError } from 'rxjs';
+import Employees from '../model/employee.model';
+
 
 @Injectable({
   providedIn: 'root'
