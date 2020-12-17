@@ -3,7 +3,7 @@ import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angula
 import { Subscription } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-UntilDestroy()
+@UntilDestroy()
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
   
         if (event instanceof NavigationEnd) {
           this.canShowFavorBtn = this.checkUrl(event);
+          console.log(event.url);
           this.isSpinnerVisible = false;
         }
   
@@ -44,7 +45,7 @@ export class AppComponent implements OnInit {
   }
 
   toFavors(): void {
-    this.router.navigate(['/favourites']);
+    this.router.navigate(['search', 'favourites']);
   }
 
   changeTheme(): void {

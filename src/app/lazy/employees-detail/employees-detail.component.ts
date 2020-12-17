@@ -33,9 +33,7 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
     private store: Store,
     private changeDetectorRef: ChangeDetectorRef,
     private spinner: NgxSpinnerService
-  ) {
-    this.changeDetectorRef.detach();
-  }
+  ) { }
 
   ngOnInit(): void {
     this.spinner.show();
@@ -64,7 +62,7 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
     this.employeeData = value;
     this.spinner.hide();
     this.isFavouriteCheck();
-    this.triggerDetection();
+    this.changeDetectorRef.markForCheck();
   }
 
   fetchDataFromAPI(id) {
@@ -81,7 +79,7 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
     this.spinner.hide();
     this.isFavouriteCheck();
     this.store.dispatch(allEmployeesLoaded({employees: [].concat(data)}));
-    this.triggerDetection();
+    this.changeDetectorRef.markForCheck();
   }
 
   isFavouriteCheck(): void {
@@ -104,18 +102,10 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
       this.isFavourite = !this.isFavourite;
     }
 
-    this.triggerDetection();
-  }
-
-  triggerDetection() {
-    if (!this.destroyed) {
-      this.changeDetectorRef.detectChanges();
-    }
+    this.changeDetectorRef.markForCheck();
   }
 
   ngOnDestroy() {
-    this.destroyed = true;
-
     if (this.localStoreData) {
       localStorage.setItem('favour_employes', JSON.stringify(this.localStoreData));
     }

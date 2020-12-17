@@ -76,7 +76,6 @@ export class MainPageComponent implements OnInit {
       },
       err => {
         this.spinner.hide();
-        console.log(err);
         this.generateError('error');
       }
     );
@@ -104,7 +103,6 @@ export class MainPageComponent implements OnInit {
       .subscribe(
         noop,
         err => {
-          console.log(err);
           this.createMessage(type);
         }
       );
@@ -113,5 +111,4 @@ export class MainPageComponent implements OnInit {
   createMessage(type: string): void {
     this.message.create(type, `Server ${type}`);
   }
-
 }

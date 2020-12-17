@@ -22,7 +22,7 @@ import Searches from 'src/app/model/search.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchResultsComponent implements OnInit {
-  destroyed = false;
+  //destroyed = false;
   routerSubscription$: Subscription;
   storeSubscription$: Subscription;
   count: number;
@@ -70,7 +70,7 @@ export class SearchResultsComponent implements OnInit {
     this.count = storeData.count;
     this.canLoadingMore = this.checkLoadMore();
     this.spinner.hide();
-    this.triggerDetection();
+    this.changeDetectorRef.markForCheck();
   }
 
   getDataFromAPI(id): void {
@@ -79,7 +79,7 @@ export class SearchResultsComponent implements OnInit {
         this.apiDataHandle(next);
         this.spinner.hide();
         this.apiStoreHandle(id, next);
-        this.triggerDetection();
+        this.changeDetectorRef.markForCheck();
       })
   }
 
@@ -113,16 +113,6 @@ export class SearchResultsComponent implements OnInit {
   }
 
   navigateToDetails(id): void {
-    this.router.navigate(['/property', id]);
-  }
-
-  triggerDetection() {
-    if (!this.destroyed) {
-      this.changeDetectorRef.detectChanges();
-    }
-  }
-
-  ngOnDestroy() {
-    this.destroyed = true;
+    this.router.navigate(['/search', 'property', id]);
   }
 }
