@@ -1,0 +1,36 @@
+<div class="container">
+    <nz-page-header nzBackIcon [nzGhost]="false">
+        <nz-page-header-title>{{employeeData.name.first + ' ' + employeeData.name.last}}</nz-page-header-title>
+        <nz-page-header-subtitle>{{employeeData.isActive ? 'Active' : 'Inactive'}}</nz-page-header-subtitle>
+        <nz-page-header-extra>
+            <button *ngIf="!isFavourite"nz-button nzType="primary" (click)="toggleFavors()">Add to Favourites</button>
+            <button *ngIf="isFavourite" nz-button nzType="danger" (click)="toggleFavors()">Remove from Favourites</button>
+          </nz-page-header-extra>
+        <nz-page-header-content>
+            
+            
+
+            <div class="description__container">
+                <img src='assets/download.jpeg' alt="" srcset="" height="400" width="800px">
+                <nz-descriptions class="user__info" nzTitle="User Info" [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }">
+                    <nz-descriptions-item nzTitle="UserName">{{employeeData.name.first + ' ' + employeeData.name.last}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Telephone">{{employeeData.phone}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="E-mail">{{employeeData.email}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Age">{{employeeData.age}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Guid">{{employeeData.guid}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Address">
+                      {{employeeData.address}}
+                    </nz-descriptions-item>
+                </nz-descriptions>
+
+                
+            </div>
+
+            <nz-descriptions nzTitle="About" [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }">
+                <nz-descriptions-item nzTitle="About">{{employeeData.about}}</nz-descriptions-item>
+            </nz-descriptions>
+        </nz-page-header-content>
+    </nz-page-header>
+</div>
+
+
