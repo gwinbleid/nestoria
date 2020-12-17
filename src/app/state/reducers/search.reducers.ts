@@ -1,7 +1,7 @@
 import { createEntityAdapter, EntityState } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
-import { SearchesActions } from "../actions-types";
 import Searches from "src/app/model/search.model";
+import { allSearchesLoaded, nextTenEmployeesLoaded } from "../searches.actions";
 
 export interface SearchesState extends EntityState<Searches> {
     [x: string]: any;
@@ -15,13 +15,13 @@ export const _searchesReducer = createReducer(
 
     initialSearchesState,
 
-    on(SearchesActions.allSearchesLoaded,
+    on(allSearchesLoaded,
         (state, action) => {
             return adapter.addMany(action.searches, {...state})
         }
     ),
 
-    on(SearchesActions.nextTenEmployeesLoaded,
+    on(nextTenEmployeesLoaded,
         (state, action) => {
             let searches = action.searches[0];
             //searches.count = state.entities[action.searches[0].id].count;

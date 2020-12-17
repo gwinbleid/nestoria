@@ -10,6 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { selectAllSearches } from 'src/app/state/searches.selectors';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import Searches from '../../model/search.model';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @UntilDestroy()
 @Component({
@@ -24,7 +25,6 @@ export class MainPageComponent implements OnInit {
   searchRequestValue?: string;
   isEmpty = false;
   recentSearches = [];
-  serverError = false;
 
   constructor(
     private employeesService: EmployeesService,
@@ -40,11 +40,9 @@ export class MainPageComponent implements OnInit {
 
   storageInitManipulate(): void {
     const fromStorage = JSON.parse(localStorage.getItem('recent_searches'));
-    if (fromStorage) {
-      this.recentSearches = this.recentSearches.concat(fromStorage);
-    } else {
-      localStorage.setItem('recent_searches', JSON.stringify(this.recentSearches));
-    }
+
+    fromStorage ? this.recentSearches = this.recentSearches.concat(fromStorage)
+      : localStorage.setItem('recent_searches', JSON.stringify(this.recentSearches));
   }
 
   search(): void {
@@ -53,19 +51,22 @@ export class MainPageComponent implements OnInit {
       select(selectAllSearches),
       untilDestroyed(this)
     ).subscribe(next => {
-      if (next.length && next.findIndex(item => item.id === this.searchRequestValue) !== -1) {
-        this.spinner.hide();
-        this.router.navigate(['/search', {find: this.searchRequestValue}]);
-      } else {
-        this.fetchData();
-      }
+      this.checkStoreValue(next) ? this.searchNavigate() : this.fetchData();
     });
+  }
+
+  searchNavigate() {
+    this.spinner.hide();
+    this.router.navigate(['/search', {find: this.searchRequestValue}]);
+  }
+
+  checkStoreValue(next): boolean {
+    return next.length && next.findIndex(item => item.id === this.searchRequestValue) !== -1
   }
 
   fetchData(): void {
     if (!this.searchRequestValue) {
-      this.spinner.hide();
-      this.message.create('info', `No Data`);
+      this.noDataHandler();
       return;
     }
 
@@ -82,20 +83,20 @@ export class MainPageComponent implements OnInit {
   }
 
   fetchRequestHandler(data): void {
-    if (data.count) {
-      this.sendDataToStore(data);
-      this.spinner.hide();
-      this.router.navigate(['/search', {find: this.searchRequestValue}]);
-    } else {
-      this.spinner.hide();
-      this.message.create('info', `No Data`);
-    }
+    data.count ? this.sendDataToStore(data) : this.noDataHandler();
   }
 
   sendDataToStore(data): void {
     this.store.dispatch(allEmployeesLoaded({employees: data.data}));
     const obj: Searches[] = [{id: this.searchRequestValue, results: data.data, count: data.count}];
     this.store.dispatch(allSearchesLoaded({searches: obj}));
+    this.spinner.hide();
+    this.router.navigate(['/search', {find: this.searchRequestValue}]);
+  }
+
+  noDataHandler() {
+    this.spinner.hide();
+    this.message.create('info', `No Data`);
   }
 
   generateError(type): void {

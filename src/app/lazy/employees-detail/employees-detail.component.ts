@@ -18,10 +18,7 @@ import Employees from 'src/app/model/employee.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmployeesDetailComponent implements OnInit, OnDestroy {
-  destroyed = false;
-
   storeSubscription$: Subscription;
-  routeSubscription$: Subscription;
   employeeID: string = '';
   employeeData: Employees;
   isFavourite: boolean;
@@ -37,7 +34,6 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.spinner.show();
-
     this.employeeID = this.route.snapshot.params.id;
     this.getEmployee(this.employeeID);
   }
@@ -48,12 +44,7 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
       untilDestroyed(this)
     ).subscribe(
       next => {
-        if (!next.length) {
-          this.spinner.hide();
-          this.fetchDataFromAPI(id);
-        } else {
-          this.storeDataManupulate(next[0]);
-        }
+        next.length ? this.storeDataManupulate(next[0]) : this.fetchDataFromAPI(id);
       }
     )
   }
@@ -84,12 +75,11 @@ export class EmployeesDetailComponent implements OnInit, OnDestroy {
 
   isFavouriteCheck(): void {
     this.localStoreData = JSON.parse(localStorage.getItem('favour_employes'));
+    this.localDataCheck(this.localStoreData) ? this.isFavourite = true : this.isFavourite = false;
+  }
 
-    if (this.localStoreData && this.localStoreData.findIndex(element => element._id === this.employeeID) !== -1) {
-      this.isFavourite = true;
-    } else {
-      this.isFavourite = false;
-    }
+  localDataCheck(localStoreData): boolean {
+    return this.localStoreData && this.localStoreData.findIndex(element => element._id === this.employeeID) !== -1
   }
 
   toggleFavors(): void {

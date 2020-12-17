@@ -46,7 +46,8 @@ export class EmployeesService {
           return item._id === id;
         })),
         take(1),
-        flatMap(data => data)
+        flatMap(data => data),
+        delay(700)
       )
   }
 
@@ -56,7 +57,8 @@ export class EmployeesService {
       map(res => res.filter(item => {
         return item.company.includes(value.toUpperCase())
       })),
-      map(res => res.slice(length, length + 10))
+      map(res => res.slice(length, length + 10)),
+      delay(700)
     )
   }
 

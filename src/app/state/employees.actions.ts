@@ -1,25 +1,20 @@
 import { createAction, props } from "@ngrx/store";
 import Employees from "../model/employee.model";
 
+const loadAllEmployeesType = "[Employees Resolver] Load All Employees";
+const allEmployeesLoadedType = "[Load Employees Effect] All Employees Loaded";
+const additionallyEmployeesLoadedType = "[Load Additional Employees Search Effect] Additional Employees Loaded";
+
 export const loadAllEmployees = createAction(
-    "[Employees Resolver] Load All Employees"
+    loadAllEmployeesType
 );
 
 export const allEmployeesLoaded = createAction(
-    "[Load Employees Effect] All Employees Loaded",
+    allEmployeesLoadedType,
     props<{employees: Employees[]}>()
 );
 
 export const additionallyEmployeesLoaded = createAction(
-    "[Load Additional Employees Search Effect] Additional Employees Loaded",
+    additionallyEmployeesLoadedType,
     props<{additionalData: Employees[]}>()
-)
-
-/*export const loadNextTenEmployees = createAction(
-    "[Load Next Ten Employees Component] Load Next Empoyees"
-)
-
-export const nextTenEmployeesLoaded = createAction(
-    "[Load Next Ten Employees Effect] Next Ten Employees Loaded",
-    props<{employees: Employees[]}>()
-);*/
+);

@@ -2,9 +2,8 @@ import { Injectable } from "@angular/core";
 import { Actions, ofType, createEffect, act } from '@ngrx/effects';
 import { concatMap, count, exhaustMap, map, switchMap, tap } from "rxjs/operators";
 import { EmployeesService } from "../services/employees.service";
-import { SearchesActions } from "./actions-types";
 import { additionallyEmployeesLoaded, allEmployeesLoaded } from "./employees.actions";
-import { nextTenEmployeesLoaded } from "./searches.actions";
+import { loadNextTenEmployees, nextTenEmployeesLoaded } from "./searches.actions";
 
 @Injectable()
 export class SearchesEffects {
@@ -16,7 +15,7 @@ export class SearchesEffects {
         let query: string;
         return this.actions$
         .pipe(
-            ofType(SearchesActions.loadNextTenEmployees),
+            ofType(loadNextTenEmployees),
             concatMap(action => {
                 this.previousdata = action.prevData;
                 this.count = action.count;

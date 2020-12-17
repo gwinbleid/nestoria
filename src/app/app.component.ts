@@ -11,11 +11,9 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
-  title = 'nestoria';
   routeSubscription$: Subscription;
   canShowFavorBtn = true;
   theme = '';
-  isSpinnerVisible = false;
 
   constructor(private router: Router) { }
 
@@ -28,19 +26,13 @@ export class AppComponent implements OnInit {
     this.router.events
       .pipe(untilDestroyed(this))
       .subscribe((event) => {
-        if (event instanceof NavigationStart) {
-          this.isSpinnerVisible = true;
-        }
+        if (event instanceof NavigationStart) { }
   
         if (event instanceof NavigationEnd) {
           this.canShowFavorBtn = this.checkUrl(event);
-          console.log(event.url);
-          this.isSpinnerVisible = false;
         }
   
-        if (event instanceof NavigationError) {
-  
-        }
+        if (event instanceof NavigationError) { }
       });
   }
 

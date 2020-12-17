@@ -1,21 +1,27 @@
 import { createAction, props } from "@ngrx/store";
 import Searches from "../model/search.model";
 
+const loadAllSearchesType = "[Searches Resolver] Load All Recent Searches";
+const allSearchesLoadedType = "[Load Searches Effect] All Recent Searches Loaded";
+const loadNextTenEmployeesType = "[Load Next Ten Employees Component] Load Next Employees";
+const nextTenEmployeesLoadedType = "[Load Next Ten Employees Effect] Next Ten Employees Loaded";
+
+
 export const loadAllSearches = createAction(
-    "[Searches Resolver] Load All Recent Searches"
+    loadAllSearchesType
 );
 
 export const allSearchesLoaded = createAction(
-    "[Load Searches Effect] All Recent Searches Loaded",
+    allSearchesLoadedType,
     props<{searches: Searches[]}>()
 );
 
 export const loadNextTenEmployees = createAction(
-    "[Load Next Ten Employees Component] Load Next Employees",
+    loadNextTenEmployeesType,
     props<{from: string, to: number, prevData: Searches[], count: number}>()
 );
 
 export const nextTenEmployeesLoaded = createAction(
-    "[Load Next Ten Employees Effect] Next Ten Employees Loaded",
+    nextTenEmployeesLoadedType,
     props<{searches: Searches[]}>()
 );

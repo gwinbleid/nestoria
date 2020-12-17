@@ -22,15 +22,12 @@ import Searches from 'src/app/model/search.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchResultsComponent implements OnInit {
-  //destroyed = false;
-  routerSubscription$: Subscription;
   storeSubscription$: Subscription;
   count: number;
   searchValue: any;
-  isInitLoading: boolean = true; // bug
+  isInitLoading: boolean = true;
   canLoadingMore: boolean = true;
   employees = [];
-  employeesData$: Observable<any[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,13 +53,12 @@ export class SearchResultsComponent implements OnInit {
       untilDestroyed(this)
     ).subscribe(next => {
       let nextID = next.findIndex(item => item.id === this.searchValue);
-      
-      if (next.length && nextID !== -1) {
-        this.storeDataHandle(next[nextID]);
-      } else {
-        this.getDataFromAPI(this.searchValue);
-      }
+      this.checkStoreSelect(next.length, nextID) ? this.storeDataHandle(next[nextID]) : this.getDataFromAPI(this.searchValue);
     });
+  }
+
+  checkStoreSelect(length, id) {
+    return length && id !== -1
   }
 
   storeDataHandle(storeData) {
