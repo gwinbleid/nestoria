@@ -1,14 +1,13 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { noop, Subscription } from 'rxjs';
 import { EmployeesService } from '../../services/employees.service';
-import { AppState } from '../../state/index';
 import { allEmployeesLoaded } from '../../state/employees.actions';
 import { allSearchesLoaded } from 'src/app/state/searches.actions';
 import { Searches } from 'src/app/model/search';
-import { NgxSpinnerService } from "ngx-spinner";
+import { NgxSpinnerService } from 'ngx-spinner';
 import { selectAllSearches } from 'src/app/state/searches.selectors';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -23,12 +22,12 @@ export class MainPageComponent implements OnInit {
 
   storeSelector$: Subscription;
   searchRequestValue?: string;
-  isEmpty: boolean = false;
+  isEmpty = false;
   recentSearches = [];
-  serverError: boolean = false;
+  serverError = false;
 
   constructor(
-    private employeesService : EmployeesService,
+    private employeesService: EmployeesService,
     private router: Router,
     private message: NzMessageService,
     private store: Store,
@@ -40,12 +39,15 @@ export class MainPageComponent implements OnInit {
   }
 
   storageInitManipulate(): void {
-    let from_storage = JSON.parse(localStorage.getItem('recent_searches'));
-    if (from_storage) this.recentSearches = this.recentSearches.concat(from_storage);
-    if (!from_storage) localStorage.setItem('recent_searches', JSON.stringify(this.recentSearches));
+    const fromStorage = JSON.parse(localStorage.getItem('recent_searches'));
+    if (fromStorage) {
+      this.recentSearches = this.recentSearches.concat(fromStorage);
+    } else {
+      localStorage.setItem('recent_searches', JSON.stringify(this.recentSearches));
+    }
   }
 
-  search() {
+  search(): void {
     this.spinner.show();
     this.storeSelector$ = this.store.pipe(
       select(selectAllSearches),
@@ -58,11 +60,15 @@ export class MainPageComponent implements OnInit {
         this.fetchData();
       }
     });
-
-    
   }
 
-  fetchData() {
+  fetchData(): void {
+    if (!this.searchRequestValue) {
+      this.spinner.hide();
+      this.message.create('info', `No Data`);
+      return;
+    }
+
     this.employeesService.searchFirstTen(this.searchRequestValue)
     .subscribe(
       next => {
@@ -70,25 +76,26 @@ export class MainPageComponent implements OnInit {
       },
       err => {
         this.spinner.hide();
-        this.generateError('error')
+        console.log(err);
+        this.generateError('error');
       }
-    )
+    );
   }
 
-  fetchRequestHandler(data) {
+  fetchRequestHandler(data): void {
     if (data.count) {
       this.sendDataToStore(data);
       this.spinner.hide();
       this.router.navigate(['/search', {find: this.searchRequestValue}]);
-    } else {          
+    } else {
       this.spinner.hide();
       this.message.create('info', `No Data`);
     }
   }
 
-  sendDataToStore(data) {
+  sendDataToStore(data): void {
     this.store.dispatch(allEmployeesLoaded({employees: data.data}));
-    let obj: Searches[] = [{id: this.searchRequestValue, results: data.data, count: data.count}];
+    const obj: Searches[] = [{id: this.searchRequestValue, results: data.data, count: data.count}];
     this.store.dispatch(allSearchesLoaded({searches: obj}));
   }
 
@@ -97,6 +104,7 @@ export class MainPageComponent implements OnInit {
       .subscribe(
         noop,
         err => {
+          console.log(err);
           this.createMessage(type);
         }
       );

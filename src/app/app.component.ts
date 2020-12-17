@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,14 +9,15 @@ import { Observable, Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, OnDestroy {
+  title = 'nestoria';
   routeSubscription$: Subscription;
-  canShowFavorBtn: boolean = true;
+  canShowFavorBtn = true;
   theme = '';
-  isSpinnerVisible: boolean = false;
+  isSpinnerVisible = false;
 
   constructor(private router: Router) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.routeSubsribe();
     this.changeTheme();
   }
@@ -29,20 +30,20 @@ export class AppComponent implements OnInit, OnDestroy {
 
       if (event instanceof NavigationEnd) {
         this.canShowFavorBtn = this.checkUrl(event);
-        this.isSpinnerVisible = false; 
+        this.isSpinnerVisible = false;
       }
 
       if (event instanceof NavigationError) {
-        
+
       }
     });
   }
 
-  toFavors() {
+  toFavors(): void {
     this.router.navigate(['/favourites']);
   }
 
-  changeTheme() {
+  changeTheme(): void {
     this.theme = this.theme === 'dark' ? '' : 'dark';
 
     let themeUrl = './assets/themes/compact.css';
@@ -73,7 +74,7 @@ export class AppComponent implements OnInit, OnDestroy {
     return (e.url === '/main' || e.urlAfterRedirects === '/main');
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.routeSubscription$.unsubscribe();
   }
 }
