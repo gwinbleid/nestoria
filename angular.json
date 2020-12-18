@@ -30,7 +30,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/typeface-lobster/index.css"
+              "node_modules/typeface-lobster/index.css",
+              "node_modules/typeface-roboto/index.css"
             ],
             "scripts": []
           },

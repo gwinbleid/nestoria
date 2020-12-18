@@ -31,6 +31,7 @@
     "tslib": "^2.0.0",
     "typeface-lobster": "^1.1.13",
     "typeface-muli": "^1.1.13",
+    "typeface-roboto": "^1.1.13",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

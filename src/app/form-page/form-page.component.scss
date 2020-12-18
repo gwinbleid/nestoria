@@ -1,3 +1,5 @@
+$color: #1abc9c;
+
 @mixin flex-config ($dir, $justify, $align) {
     display: flex;
 
@@ -14,27 +16,96 @@
     }
 }
 
+@mixin font-Roboto-config ($size, $color, $weight, $lineHeight) {
+    font-family: 'Roboto', sans-serif;
+
+    @if $size != false {
+        font-size: $size;
+    } @else {
+        font-size: 14px;
+    }
+
+    @if $color != false {
+        color: $color;
+    } @else {
+        color: black;
+    }
+
+    @if $weight != false {
+        font-weight: $weight;
+    } @else {
+        font-weight: normal;
+    }
+
+    @if $lineHeight != false {
+        line-height: $lineHeight;
+    } @else {
+        line-height: 100%;
+    }
+}
+
 .container {
     @include flex-config(column, center, center);
     height: 100%;
+    background-color: aliceblue;
+    
+
+    h1 {
+        height: 60px;
+        width: 100%;
+        text-align: center;
+
+        @include font-Roboto-config(18px, white , false , 150%);
+        background: darken($color, 4%);
+        border-radius: 3px 3px 0 0;
+        box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+        padding: 40px
+    }
 
     form {
         @include flex-config(column, center, center);
+        flex: 1;
+        
 
-        background: linear-gradient(135deg, rgba(127,126,158,0.8491771708683473) 23%, rgba(121,117,175,0.3868613138686131) 70%);        border-radius: 20px;
-        padding: 20px;
+        background: #ffffff;
+        box-sizing: border-box;
+        box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+        min-width: 300px;
+        height: 100%;
+        margin-top: 30px;
+        margin-bottom: 30px;
 
-        .form__group {
-            @include flex-config(column, center, center);
-        }
-
-        label {
+        .wrapper {
+            @include flex-config(row, center, center);
+            flex: 1;
             width: 100%;
-            margin-bottom: 10px;
 
-            input {
-                @include flex-config(row, center, center);
-                width: 300px;
+            section {
+                min-width: 350px;
+                margin: 0 30px;
+            }
+
+            h1 {
+                padding: 20px;
+            }
+    
+            h3 {
+                color: $color;
+            }
+    
+            .form__group {
+                @include flex-config(column, center, center);
+            }
+    
+            label {
+                width: 100%;
+                margin-bottom: 10px;
+    
+                input {
+                    @include flex-config(row, center, center);
+                    width: 300px;
+                }
             }
         }
 

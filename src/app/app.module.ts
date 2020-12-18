@@ -32,6 +32,8 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
 
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { RatingInputComponent } from './form-page/custom-inputs/rating-input.component';
+import { CustomInputComponent } from './form-page/custom-inputs/custom-input.component';
 
 registerLocaleData(en);
 
@@ -46,7 +48,9 @@ const ngZorroConfig: NzConfig = {
   declarations: [
     AppComponent,
     MainPageComponent,
-    FormPageComponent
+    FormPageComponent,
+    RatingInputComponent,
+    CustomInputComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +78,7 @@ const ngZorroConfig: NzConfig = {
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },
-    { provide: NZ_CONFIG, useValue: ngZorroConfig }
+    { provide: NZ_CONFIG, useValue: ngZorroConfig },
   ],
   bootstrap: [AppComponent]
 })

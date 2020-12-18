@@ -1,50 +1,92 @@
 <div class="container">
     <form [formGroup]="amazingForm" (ngSubmit)="onSubmit()">
-    <label>
-        First Name:
-        <input nz-input type="text" formControlName="firstName" required>
-    </label>
+        <h1>Amazing Form</h1>
 
-    <label>
-        Last Name:
-        <input nz-input type="text" formControlName="lastName">
-    </label>
+        <div class="wrapper">
 
-    <div class="form__group" formGroupName="address">
-        <h3>Address</h3>
+            <section>
+                <h3>Personal Data</h3>
+                <material-input 
+                    field="Name"
+                    _id='name'
+                    formControlName="firstName"
+                ></material-input>
+            
+                <material-input 
+                    field="Surname"
+                    _id='surname'
+                    formControlName="lastName"
+                ></material-input>
 
-        <label>
-            Street:
-            <input nz-input type="text" formControlName="street">
-        </label>
+                <material-input 
+                    field="E-Mail"
+                    _id='email'
+                    formControlName="email"
+                ></material-input>
 
-        <label>
-            City:
-            <input nz-input type="text" formControlName="city">
-        </label>
-    
-        <label>
-            State:
-            <input nz-input type="text" formControlName="state">
-        </label>
+                <material-input 
+                    field="Password"
+                    _id='_password'
+                    formControlName="password"
+                ></material-input>
 
-        <label>
-            Zip Code:
-            <input nz-input type="text" formControlName="zip">
-        </label>
-    </div>
+                <material-input 
+                    field="Confirm Password"
+                    _id='confirm_password'
+                    formControlName="confirmPassword"
+                ></material-input>
+            </section>
 
-    <div formArrayName="aliases">
-        <h3>Aliases</h3> <button nz-button (click)="addAlias()">Add Alias</button>
-
-        <div *ngFor="let alias of aliases.controls; let i=index">
-        <!-- The repeated alias template -->
-            <label>
-                Alias:
-                <input nz-input type="text" [formControlName]="i">
-            </label>
+            <section>
+                <div class="form__group" formGroupName="address">
+                    <h3>Address</h3>
+            
+                    <material-input 
+                        field="Street"
+                        _id='_street'
+                        formControlName="street"
+                    ></material-input>
+            
+                    <material-input 
+                        field="City"
+                        _id='_city'
+                        formControlName="city"
+                    ></material-input>
+            
+                    <material-input 
+                        field="State"
+                        _id='_state'
+                        formControlName="state"
+                    ></material-input>
+            
+                    <material-input 
+                        field="Zip Code"
+                        _id='_zip'
+                        formControlName="zip"
+                    ></material-input>
+            
+                </div>
+            </section>    
+        
+            
+        
+            <div formArrayName="aliases">
+                <h3>Aliases</h3> <button nz-button (click)="addAlias()">Add Alias</button>
+        
+                <div *ngFor="let alias of aliases.controls; let i=index">
+                <!-- The repeated alias template -->
+        
+                    <material-input 
+                        field='Alias'
+                        [_id]="i"
+                        [formControlName]="i"
+                    ></material-input>
+                </div>
+            </div>
         </div>
-    </div>
+
+
+    
 
     <button nz-button type="submit" [disabled]="!amazingForm.valid">Submit</button>
     </form>
