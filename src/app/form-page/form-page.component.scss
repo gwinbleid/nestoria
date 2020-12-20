@@ -76,12 +76,17 @@ $color: #1abc9c;
         margin-top: 30px;
         margin-bottom: 30px;
 
+        .cust_input {
+            margin-bottom: 10px;
+        }
+
         .wrapper {
             @include flex-config(row, center, center);
             flex: 1;
             width: 100%;
 
             section {
+                @include flex-config(column, flex-start, center);
                 min-width: 350px;
                 margin: 0 30px;
             }
@@ -96,6 +101,7 @@ $color: #1abc9c;
     
             .form__group {
                 @include flex-config(column, center, center);
+
             }
     
             label {
@@ -109,6 +115,13 @@ $color: #1abc9c;
             }
         }
 
-        
+        .add_allias_btn {
+            background: $color;
+
+            &:hover {
+                opacity: 0.8;
+                cursor: pointer;
+            }
+        }
     }
 }

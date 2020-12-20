@@ -38,7 +38,11 @@ export class FormPageComponent implements OnInit {
       zip: ['', {
         validators: [Validators.required, Validators.pattern('^[0-9]{5}(?:-[0-9]{4})?$')],
         updateOn: 'blur'
-      }]
+      }],
+      add_info: this.fb.group({
+        add_input: ['', Validators.required],
+        address_rates: [1],
+      })
     }),
     password: ['', {
       validators: [Validators.required, Validators.minLength(6)],
@@ -68,7 +72,11 @@ export class FormPageComponent implements OnInit {
   }
 
   addAlias() {
-    this.aliases.push(this.fb.control(''));
+    this.aliases.push(this.fb.group({
+      'person_key' : ['key_m'],
+      'person_value': [''],
+      'person_rating': [1]
+    }));
   }
 
   onSubmit() {

@@ -1,4 +1,4 @@
-import { Component, forwardRef, HostBinding, Input, Injector } from "@angular/core";
+import { Component, forwardRef, HostBinding, Input, Injector, ElementRef, Renderer2 } from "@angular/core";
 import { ControlValueAccessor, NgControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
@@ -11,14 +11,20 @@ import { ControlValueAccessor, NgControl, NG_VALUE_ACCESSOR } from "@angular/for
                 
                 (input)="updateValue($event.target.value)"
                 (blur)="onTouched()"
+                [class.pristine]="control.pristine && !control.touched"
                 [class.error]="!control.valid && control.touched"
+                [class.dirty]="value"
+                [class.valid]="control.valid && control.touched"
             >
-            <label [class.error]="!control.valid && control.touched" for="name">{{field}}</label>      
+            <label 
+                [class.validLabel]="control.valid && control.touched"
+                [class.errorLabel]="!control.valid && control.touched"
+                for="name">{{field}}</label>      
             <ul *ngIf="control.invalid && control.touched">
                 <li class="error-message" *ngIf="!control.valid && control.errors.required">{{field}} required!</li>
                 <li class="error-message" *ngIf="!control.valid && control.errors.email">Incorrect e-mail format</li>
-                <li class="error-message" *ngIf="!control.valid && control.errors.minlength">{{field}} must be at least {{control.errors.minlength.requiredLength}}</li>
-                <li class="error-message" *ngIf="!control.valid && control.errors.maxlength">{{field}} must be no more than {{control.errors.maxlength.requiredLength}} digits</li>
+                <li class="error-message" *ngIf="!control.valid && control.errors.minlength">{{field}} must be at least {{control.errors.minlength.requiredLength}} symbols</li>
+                <li class="error-message" *ngIf="!control.valid && control.errors.maxlength">{{field}} must be no more than {{control.errors.maxlength.requiredLength}} symbols</li>
                 <li class="error-message" *ngIf="!control.valid && control.errors.pattern">Incorrect format of {{field}}</li>
                 <li class="error-message" *ngIf="!control.valid && control.errors.mustMatch">{{control.errors.mustMatch.comparsion_field}} and {{field}} don't match</li>
             </ul>
@@ -40,11 +46,14 @@ export class CustomInputComponent implements ControlValueAccessor {
     errors;
 
     constructor(
-        private inj: Injector
+        private inj: Injector,
+        private el: ElementRef,
+        private render: Renderer2
     ) { }
 
     ngOnInit() {
         this.control = this.inj.get(NgControl);
+        this.render.setStyle(this.el.nativeElement, 'height', '70px');
     }
 
     @Input() field;
@@ -55,6 +64,8 @@ export class CustomInputComponent implements ControlValueAccessor {
     get opacity() {
         return this.disabled ? 0.25 : 1;
     }
+
+
 
     onChange = (value: any) => { };
 

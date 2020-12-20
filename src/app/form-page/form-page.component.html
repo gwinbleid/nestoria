@@ -10,30 +10,35 @@
                     field="Name"
                     _id='name'
                     formControlName="firstName"
+                    class="cust_input"
                 ></material-input>
             
                 <material-input 
                     field="Surname"
                     _id='surname'
                     formControlName="lastName"
+                    class="cust_input"
                 ></material-input>
 
                 <material-input 
                     field="E-Mail"
                     _id='email'
                     formControlName="email"
+                    class="cust_input"
                 ></material-input>
 
                 <material-input 
                     field="Password"
                     _id='_password'
                     formControlName="password"
+                    class="cust_input"
                 ></material-input>
 
                 <material-input 
                     field="Confirm Password"
                     _id='confirm_password'
                     formControlName="confirmPassword"
+                    class="cust_input"
                 ></material-input>
             </section>
 
@@ -45,42 +50,72 @@
                         field="Street"
                         _id='_street'
                         formControlName="street"
+                        class="cust_input"
                     ></material-input>
             
                     <material-input 
                         field="City"
                         _id='_city'
                         formControlName="city"
+                        class="cust_input"
                     ></material-input>
             
                     <material-input 
                         field="State"
                         _id='_state'
                         formControlName="state"
+                        class="cust_input"
                     ></material-input>
             
                     <material-input 
                         field="Zip Code"
                         _id='_zip'
                         formControlName="zip"
+                        class="cust_input"
                     ></material-input>
             
+
+                    <div class="form__group" formGroupName="add_info">
+                        <material-input 
+                            field="Just Input"
+                            _id='add_input'
+                            formControlName="add_input"
+                            class="cust_input"
+                        ></material-input>
+    
+                        <rating-input formControlName='address_rates'></rating-input>
+                    </div>
+
                 </div>
+
+                
             </section>    
         
             
         
             <div formArrayName="aliases">
-                <h3>Aliases</h3> <button nz-button (click)="addAlias()">Add Alias</button>
+                <h3>Aliases</h3> <button class="add_allias_btn" (click)="addAlias()">Add Alias</button>
         
-                <div *ngFor="let alias of aliases.controls; let i=index">
+                <div *ngFor="let p of aliases.controls; let i=index">
                 <!-- The repeated alias template -->
-        
-                    <material-input 
-                        field='Alias'
-                        [_id]="i"
-                        [formControlName]="i"
-                    ></material-input>
+                    <div [formGroupName]="i">
+                        
+                        <select formControlName="person_key">
+                            <option value="key_x">AB_21Z_X</option>
+                            <option value="key_k">NR_291N_K</option>
+                            <option value="key_m">ST_KSD2_M</option>
+                        </select>
+
+                        <material-input 
+                            field="Person Value"
+                            _id='person_value'
+                            formControlName="person_value"
+                            class="cust_input"
+                        ></material-input>
+
+                        <rating-input formControlName='person_rating'></rating-input>
+                    </div>
+                    
                 </div>
             </div>
         </div>
