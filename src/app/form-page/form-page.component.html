@@ -1,4 +1,7 @@
 <div class="container">
+
+    <button class="upload__btn" (click)="upload()">Upload data</button>
+
     <form [formGroup]="amazingForm" (ngSubmit)="onSubmit()">
         <h1>Amazing Form</h1>
 
@@ -32,6 +35,7 @@
                     _id='_password'
                     formControlName="password"
                     class="cust_input"
+                    _type="password"
                 ></material-input>
 
                 <material-input 
@@ -39,6 +43,7 @@
                     _id='confirm_password'
                     formControlName="confirmPassword"
                     class="cust_input"
+                    _type="password"
                 ></material-input>
             </section>
 
@@ -74,7 +79,6 @@
                         class="cust_input"
                     ></material-input>
             
-
                     <div class="form__group" formGroupName="add_info">
                         <material-input 
                             field="Just Input"
@@ -83,47 +87,54 @@
                             class="cust_input"
                         ></material-input>
     
-                        <rating-input formControlName='address_rates'></rating-input>
+                        <rating-input label="Location" formControlName='address_rates'></rating-input>
                     </div>
-
                 </div>
-
-                
             </section>    
         
-            
-        
-            <div formArrayName="aliases">
-                <h3>Aliases</h3> <button class="add_allias_btn" (click)="addAlias()">Add Alias</button>
-        
-                <div *ngFor="let p of aliases.controls; let i=index">
-                <!-- The repeated alias template -->
-                    <div [formGroupName]="i">
-                        
-                        <select formControlName="person_key">
-                            <option value="key_x">AB_21Z_X</option>
-                            <option value="key_k">NR_291N_K</option>
-                            <option value="key_m">ST_KSD2_M</option>
-                        </select>
-
-                        <material-input 
-                            field="Person Value"
-                            _id='person_value'
-                            formControlName="person_value"
-                            class="cust_input"
-                        ></material-input>
-
-                        <rating-input formControlName='person_rating'></rating-input>
+            <section class="array__form">
+                <div class="form__group aliases" formArrayName="aliases">
+                    <div class="alias__group__header">
+                        <h3>Aliases</h3>
+                        <button class="add_allias_btn" (click)="addAlias()">Add Alias</button>
                     </div>
+
                     
+            
+                    <ng-container *ngIf="aliases.controls.length">
+                        <div *ngFor="let p of aliases.controls; let i=index">
+                            <!-- The repeated alias template -->
+                                <div class="form__group" [formGroupName]="i">
+                                    
+                                    <h4>Client {{i}}</h4>                                  
+            
+                                    <div class="select-wrapper">
+                                        <label>Access Level
+                                            <select class="select" formControlName="person_key">
+                                                <option value="key_x">AB_21Z_X</option>
+                                                <option value="key_k">NR_291N_K</option>
+                                                <option value="key_m">ST_KSD2_M</option>
+                                            </select>
+                                        </label>
+                                        
+                                    </div>
+                                              
+                                    <material-input 
+                                        field="Person Value"
+                                        _id='person_value'
+                                        formControlName="person_value"
+                                        class="cust_input"
+                                    ></material-input>
+            
+                                    <rating-input label='Loyalty' formControlName='person_rating'></rating-input>
+                                </div>
+                            </div>
+                    </ng-container>
                 </div>
-            </div>
+            </section>
         </div>
 
-
-    
-
-    <button nz-button type="submit" [disabled]="!amazingForm.valid">Submit</button>
+        <button class="submit__btn" nz-button type="submit" [disabled]="!amazingForm.valid">Submit</button>
     </form>
 </div>
 

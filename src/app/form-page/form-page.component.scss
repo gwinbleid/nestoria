@@ -65,8 +65,6 @@ $color: #1abc9c;
     form {
         @include flex-config(column, center, center);
         flex: 1;
-        
-
         background: #ffffff;
         box-sizing: border-box;
         box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
@@ -89,19 +87,24 @@ $color: #1abc9c;
                 @include flex-config(column, flex-start, center);
                 min-width: 350px;
                 margin: 0 30px;
+                height: 100%;
             }
 
             h1 {
                 padding: 20px;
             }
     
-            h3 {
+            h3, h4 {
                 color: $color;
             }
     
             .form__group {
                 @include flex-config(column, center, center);
 
+                border: 1px solid $color;
+                border-radius: 20px;
+                padding: 5px;
+                margin-bottom: 10px;
             }
     
             label {
@@ -117,11 +120,60 @@ $color: #1abc9c;
 
         .add_allias_btn {
             background: $color;
+            margin-bottom: 15px;
 
             &:hover {
                 opacity: 0.8;
                 cursor: pointer;
             }
         }
+
+        .submit__btn {
+            background-color: $color;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+    } 
+}
+
+.select-wrapper {
+    label {
+        color: $color;
+
+        select {
+            background: $color;
+            color: #ffffff;
+        }
+    }
+}
+
+.aliases {
+    position: relative;
+    justify-content: flex-start !important;
+    height: 500px;
+    overflow-y: scroll;
+    padding-top: 0 !important;
+}
+
+.alias__group__header {
+    background: #ffffff;
+    position: sticky;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.upload__btn {
+    margin-top: 20px;
+    background-color: orange;
+    color: #ffffff;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    outline: none;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.8;
     }
 }

@@ -1,4 +1,4 @@
-import { Component, forwardRef, HostBinding, Input, Injector, ElementRef, Renderer2 } from "@angular/core";
+import { Component, forwardRef, HostBinding, Input, Injector, ElementRef, Renderer2, ChangeDetectorRef } from "@angular/core";
 import { ControlValueAccessor, NgControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
@@ -7,17 +7,18 @@ import { ControlValueAccessor, NgControl, NG_VALUE_ACCESSOR } from "@angular/for
         <div class="group" >
             <input 
                 id="name" 
-                type="text"
-                
+                type={{_type}}
+                (input)="updateValue($event.target.value)"
+                (change)="updateValue($event.target.value)"
                 (input)="updateValue($event.target.value)"
                 (blur)="onTouched()"
-                [class.pristine]="control.pristine && !control.touched"
+                value={{value}}
                 [class.error]="!control.valid && control.touched"
-                [class.dirty]="value"
-                [class.valid]="control.valid && control.touched"
+                [class.dirty]="!!value"
+                [class.valid]="control.valid"
             >
             <label 
-                [class.validLabel]="control.valid && control.touched"
+                [class.validLabel]="control.valid"
                 [class.errorLabel]="!control.valid && control.touched"
                 for="name">{{field}}</label>      
             <ul *ngIf="control.invalid && control.touched">
@@ -41,23 +42,10 @@ import { ControlValueAccessor, NgControl, NG_VALUE_ACCESSOR } from "@angular/for
 })
 export class CustomInputComponent implements ControlValueAccessor {
 
-    control: NgControl;
-    value = '';
-    errors;
-
-    constructor(
-        private inj: Injector,
-        private el: ElementRef,
-        private render: Renderer2
-    ) { }
-
-    ngOnInit() {
-        this.control = this.inj.get(NgControl);
-        this.render.setStyle(this.el.nativeElement, 'height', '70px');
-    }
-
     @Input() field;
     @Input() _id;
+
+    @Input() _type;
 
     @Input() disabled = false;
     @HostBinding('style.opacity')
@@ -65,7 +53,24 @@ export class CustomInputComponent implements ControlValueAccessor {
         return this.disabled ? 0.25 : 1;
     }
 
+    control: NgControl;
+    value = '';
+    errors;
 
+    constructor(
+        private inj: Injector,
+        private el: ElementRef,
+        private render: Renderer2,
+        private changeDetectorRef: ChangeDetectorRef
+    ) { }
+
+    ngOnInit() {
+        this.control = this.inj.get(NgControl);
+        this.render.setStyle(this.el.nativeElement, 'height', '70px');
+        this._type = this._type ? this._type : 'text';
+    }
+
+    
 
     onChange = (value: any) => { };
 
@@ -90,9 +95,8 @@ export class CustomInputComponent implements ControlValueAccessor {
     }
 
     updateValue(e) {
-        this.value = e; // html
-        console.log(this.control.errors);
-        this.onChange(e);
+        //this.value = e; // html
+        this.writeValue(e)
         this.onTouched();
     }
 }
